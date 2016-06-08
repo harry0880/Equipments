@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -25,6 +26,10 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.LocationSource;
+import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener,LocationSource
@@ -32,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements
     Context context;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+
+    SearchableSpinner spInstType;
+    ArrayAdapter<String> instituteTypeAdapter;
 
     private boolean mRequestingLocationUpdates = false;
 
@@ -53,8 +61,10 @@ public class MainActivity extends AppCompatActivity implements
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         context=this;
-        if (checkPlayServices()) {
+        initialize();
+        setInstType();
 
+        if (checkPlayServices()) {
             // Building the GoogleApi client
             buildGoogleApiClient();
             mGoogleApiClient.connect();
@@ -63,28 +73,29 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    void initialize()
+    {
+        /*etInstName=(SearchableSpinner)findViewById(R.id.etInstituteName);*/
+        spInstType=(SearchableSpinner) findViewById(R.id.spInstType);
+
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    void setInstType()
+    {
+        ArrayList<String> ar=new ArrayList<>();
+        ar.add("GH0 M");
+        ar.add("MMS");
+        ar.add("MMg");
+        ar.add("MMq");
+        ar.add("ght mm");
+        instituteTypeAdapter=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,ar);
+        instituteTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spInstType.setAdapter(instituteTypeAdapter);
     }
 
+
+   //***************////LocationManager////////***********
+    //START
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         createLocationRequest();
@@ -105,21 +116,6 @@ public class MainActivity extends AppCompatActivity implements
                 .build();
 
     }
-
-   /* private boolean checkPlayServices() {
-        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-        int result = googleAPI.isGooglePlayServicesAvailable(this);
-        if(result != ConnectionResult.SUCCESS) {
-            if(googleAPI.isUserResolvableError(result)) {
-                googleAPI.getErrorDialog(this, result,
-                        CONNECTION_FAILURE_RESOLUTION_REQUEST).show();
-            }
-
-            return false;
-        }
-
-        return true;
-    }*/
 
     private boolean checkPlayServices() {
         // Check that Google Play services is available
@@ -172,7 +168,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
@@ -196,6 +191,21 @@ public class MainActivity extends AppCompatActivity implements
     public void deactivate() {
         mMapLocationListener = null;
     }
+   //END
+    //***************////LocationManager////////***********
 
 
+/*  private boolean checkPlayServices() {
+        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+        int result = googleAPI.isGooglePlayServicesAvailable(this);
+        if(result != ConnectionResult.SUCCESS)
+            {
+                return true;
+            }
+            else {
+                googleAPI.getErrorDialog(this, result,
+                        CONNECTION_FAILURE_RESOLUTION_REQUEST).show();
+            return false;
+            }
+    }*/
 }

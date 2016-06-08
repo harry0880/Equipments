@@ -25,6 +25,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.google.android.gms:play-services-location:9.0.2'
+    compile 'com.rengwuxian.materialedittext:library:2.1.4'
+    compile 'com.github.ganfra:material-spinner:1.1.1'
+    compile 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.2.0'
+    compile 'com.github.aakira:expandable-layout:1.5.1@aar'
 /*    complie 'com.google.android.gms'*/
 /*    compile 'com.google.android.gms:play-services:9.0.2'*/
 
