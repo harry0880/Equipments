@@ -54,6 +54,13 @@ public class DBConstant {
     public static final String C_DateOfInspection="DateOfInspection";
     public static final String C_DateOfInspectionGPS="DateOfInspectionGPS";
 
+    public final static String TBL_Img_Data="Img";
+    public final static String C_Image="Image";
+    public final static String C_Image_Id="Image_Id";
+    public final static String C_Image_Desc="Desc";
+
+    public final static int C_No_of_Image=5;
+
 
     public static final String CREATE_TABLE_District_Master= "CREATE TABLE "+ T_District_Master + "(" + C_Dist_Scode/*0*/ + " TEXT,"
             + C_Dist_Code/*1*/ + " TEXT,"
@@ -96,5 +103,11 @@ public class DBConstant {
             +C_DateOfInspection+" TEXT,"
             +C_DateOfInspectionGPS+" TEXT,"
             +C_Remarks+ " TEXT);";
+
+    public final static String Create_Table_Image="Create table "+ TBL_Img_Data+ "( "+C_ID+" INTEGER ,"
+            +C_Image+" TEXT,"
+            +C_Image_Id+" TEXT,"
+            +C_Image_Desc+" TEXT)";
+
 
 }

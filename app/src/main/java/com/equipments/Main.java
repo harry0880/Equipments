@@ -43,9 +43,9 @@ public class Main extends AppCompatActivity {
 
         FragmentPagerItems pages = new FragmentPagerItems(this);
 
-      pages.add(FragmentPagerItem.of("1", DataInput1.class));
+        pages.add(FragmentPagerItem.of("1", DataInput1.class));
         pages.add(FragmentPagerItem.of("2", DataInput2.class));
-        pages.add(FragmentPagerItem.of("3", DataInput2.class));
+        pages.add(FragmentPagerItem.of("3", DataInput3.class));
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), pages);
