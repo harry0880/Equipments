@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
@@ -21,15 +22,14 @@ public class DataInput2 extends Fragment {
     ArrayAdapter<String> dataAdapter;
     SwipeMenuListView listview;
     ViewGroup.LayoutParams lvp;
+    EditText etSerialno,etDOI,etDOInspec,etRemarks;
     SearchableSpinner spInstType;
-    ArrayAdapter<String> instituteTypeAdapter;
     FancyButton btnAdd;
     private final String[] array = {"Hello"};
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_datainput2, container, false);
-
 
 
         return view;
@@ -63,12 +63,13 @@ public class DataInput2 extends Fragment {
         listview=(SwipeMenuListView) view.findViewById(R.id.listView);
         lvp=(ViewGroup.LayoutParams)listview.getLayoutParams();
         btnAdd=(FancyButton) view.findViewById(R.id.btnAdd);
+        etSerialno=(EditText)view.findViewById(R.id.etSerialNumber);
+        etDOI=(EditText)view.findViewById(R.id.DateOfInstallment);
+        etDOInspec=(EditText)view.findViewById(R.id.DateOfInspection);
+
 
     }
-    private int dp2px(int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
-                getResources().getDisplayMetrics());
-    }
+
 
 
 

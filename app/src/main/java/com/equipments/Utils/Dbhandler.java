@@ -104,10 +104,11 @@ public class Dbhandler extends SQLiteOpenHelper {
                     }
                     if(i==1)
                     {
-                        values.put(DBConstant.C_CategoryId,jsonChildNode.optString("Equipmentcategory_id").toString());
-                        values.put(DBConstant.C_CategoryName,jsonChildNode.optString("Equipmentcategory_detail").toString());
+
+                        values.put(DBConstant.C_Doc_Inst_TypeID,jsonChildNode.optString("Institutetype_id").toString());
+                        values.put(DBConstant.C_Doc_Inst_Type_Name,jsonChildNode.optString("Institutetype_detail").toString());
                         SQLiteDatabase writeableDB = getWritableDatabase();
-                        writeableDB.insert(DBConstant.T_Category, null, values);
+                        writeableDB.insert(DBConstant.T_Doc_Inst_Type, null, values);
                         writeableDB.close();
                     }
                     /*if(i==2)
@@ -118,45 +119,49 @@ public class Dbhandler extends SQLiteOpenHelper {
                         writeableDB.insert(DBConstant.T_Doc_Spl_Type, null, values);
                         writeableDB.close();
                     }*/
-                    if(i==3)
+                    if(i==2)
                     {
-                        values.put(DBConstant.C_Doc_Inst_ID,jsonChildNode.optString("Institutetype_id").toString());
-                        values.put(DBConstant.C_Doc_Inst_Detail,jsonChildNode.optString("Institutetype_detail").toString());
+
+                        values.put(DBConstant.C_Doc_Inst_ID,jsonChildNode.optString("Instid").toString());
+                        values.put(DBConstant.C_Doc_Inst_Detail,jsonChildNode.optString("Instname").toString());
+                        values.put(DBConstant.C_Doc_Inst_TypeID,jsonChildNode.optString("InstType").toString());
+                        values.put(DBConstant.C_Dist_Code,jsonChildNode.optString("HealthInstituteDCode").toString());
                         SQLiteDatabase writeableDB = getWritableDatabase();
                         writeableDB.insert(DBConstant.T_Doc_Inst, null, values);
                         writeableDB.close();
                     }
-                    if(i==4)
+                    if(i==3)
                     {
+
+                        values.put(DBConstant.C_CategoryId,jsonChildNode.optString("Equipmentcategory_id").toString());
+                        values.put(DBConstant.C_CategoryName,jsonChildNode.optString("Equipmentcategory_detail").toString());
+                        SQLiteDatabase writeableDB = getWritableDatabase();
+                        writeableDB.insert(DBConstant.T_Category, null, values);
+                        writeableDB.close();
+                    }
+                    if(i==4){
                         values.put(DBConstant.C_EquipmentId,jsonChildNode.optString("EquipmentManufacturer_id").toString());
                         values.put(DBConstant.C_EquipmentName,jsonChildNode.optString("EquipmentManufacturer_detail").toString());
                         SQLiteDatabase writeableDB = getWritableDatabase();
-                        writeableDB.insert(DBConstant.T_Doc_Inst, null, values);
+                        writeableDB.insert(DBConstant.T_Equipment, null, values);
                         writeableDB.close();
+
                     }
-                    if(i==5){
-                        values.put(DBConstant.C_Doc_Inst_ID,jsonChildNode.optString("Instid").toString());
-                        values.put(DBConstant.C_Doc_Inst_Detail,jsonChildNode.optString("Instname").toString());
-                        values.put(DBConstant.C_Doc_Inst_ID,jsonChildNode.optString("InstType").toString());
-                        values.put(DBConstant.C_Doc_Inst_Detail,jsonChildNode.optString("HealthInstituteDCode").toString());
+                    if(i==5)
+                    {
+
+                        values.put(DBConstant.C_EquipmentId,jsonChildNode.optString("EquipmentNameMaster_id").toString());
+                        values.put(DBConstant.C_EquipmentName,jsonChildNode.optString("EquipmentNameMaster_detail").toString());
                         SQLiteDatabase writeableDB = getWritableDatabase();
-                        writeableDB.insert(DBConstant.T_Doc_Inst, null, values);
+                        writeableDB.insert(DBConstant.T_Equipment, null, values);
                         writeableDB.close();
                     }
                     if(i==6)
                     {
-                        values.put(DBConstant.C_Doc_Inst_ID,jsonChildNode.optString("EquipmentSupplier_id").toString());
-                        values.put(DBConstant.C_Doc_Inst_Detail,jsonChildNode.optString("EquipmentSupplier_detail").toString());
+                        values.put(DBConstant.C_SupplierId,jsonChildNode.optString("EquipmentSupplier_id").toString());
+                        values.put(DBConstant.C_SupplierName,jsonChildNode.optString("EquipmentSupplier_detail").toString());
                         SQLiteDatabase writeableDB = getWritableDatabase();
-                        writeableDB.insert(DBConstant.T_Doc_Inst, null, values);
-                        writeableDB.close();
-                    }
-                    if(i==7)
-                    {
-                        values.put(DBConstant.C_Doc_Inst_ID,jsonChildNode.optString("EquipmentNameMaster_id").toString());
-                        values.put(DBConstant.C_Doc_Inst_Detail,jsonChildNode.optString("EquipmentNameMaster_detail").toString());
-                        SQLiteDatabase writeableDB = getWritableDatabase();
-                        writeableDB.insert(DBConstant.T_Doc_Inst, null, values);
+                        writeableDB.insert(DBConstant.T_Supplier, null, values);
                         writeableDB.close();
                     }
                 }

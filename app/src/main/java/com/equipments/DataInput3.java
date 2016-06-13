@@ -85,6 +85,12 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
             }
         });
 
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Save_Photo_Async_Task().execute();
+            }
+        });
 
 
         super.onViewCreated(view, savedInstanceState);

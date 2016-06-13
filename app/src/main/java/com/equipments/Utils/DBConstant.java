@@ -71,6 +71,7 @@ public class DBConstant {
 
     public static final String CREATE_TABLE_Institute_MASTER = "CREATE TABLE "+ T_Doc_Inst + "(" + C_Doc_Inst_ID/*0*/ + " TEXT,"
             + C_Doc_Inst_Detail/*1*/ +" TEXT,"
+            + C_Doc_Inst_TypeID/*1*/ +" TEXT,"
             +C_Dist_Code+" TEXT);";
     public static final String CREATE_TABLE_Category_Master= "CREATE TABLE "+ T_Category + "(" + C_CategoryId + " TEXT,"
             + C_CategoryName+ " TEXT);";

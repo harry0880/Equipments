@@ -1,5 +1,6 @@
 package com.equipments;
 
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,12 +26,14 @@ public class DataInput1 extends Fragment {
   SearchableSpinner spInstType,spDistrict,spEquipment,spCategory,spManufacturer,spSupplier,spInstitute;
   ArrayAdapter<InstituteType> instituteTypeAdapter;
   Dbhandler db;
+  GetSet getset;
 
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
     View view= inflater.inflate(R.layout.fragment_datainput1, container, false);
   db=new Dbhandler(getActivity());
+    getset=new GetSet();
     return view;
   }
 
@@ -55,7 +58,12 @@ public class DataInput1 extends Fragment {
   {
         /*etInstName=(SearchableSpinner)findViewById(R.id.etInstituteName);*/
     spInstType=(SearchableSpinner) view.findViewById(R.id.spInstType);
-
+    spCategory=(SearchableSpinner) view.findViewById(R.id.spCategory);
+    spSupplier=(SearchableSpinner) view.findViewById(R.id.spSupplier);
+    spManufacturer=(SearchableSpinner) view.findViewById(R.id.spManufacturer);
+    spEquipment=(SearchableSpinner) view.findViewById(R.id.spEquipment);
+    spInstitute=(SearchableSpinner) view.findViewById(R.id.spInstName);
+    spDistrict=(SearchableSpinner) view.findViewById(R.id.spDist);
   }
 
   void setInstType()
@@ -111,5 +119,17 @@ public class DataInput1 extends Fragment {
     Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spCategory.setAdapter(Adapter);
     spCategory.setTitle("Category");
+  }
+
+  void savedata()
+  {
+    ContentValues cv=new ContentValues();
+    cv.put(DBConstant.C_Dist_Code,getset.getDcode_ds());
+    cv.put(DBConstant.C_Doc_Inst_TypeID,getset.getInstitutetype_id());
+    cv.put(DBConstant.C_EquipmentId,getset.getEquipmentNameMaster_id());
+    cv.put(DBConstant.C_SupplierId,getset.getEquipmentSupplier_id());
+    cv.put(DBConstant.C_CategoryId,getset.getEquipmentcategory_id());
+    cv.put(DBConstant.C_ManufacturerID,getset.getEquipmentManufacturer_id());
+    cv.put(DBConstant.C_Doc_Inst_ID,getset.getInstid());
   }
 }
