@@ -29,6 +29,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#303F9F"
+        android:text="District"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height= "2dp"
+        android:background="#303F9F" />
+    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+        android:id="@+id/spDist"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#303F9F"
         android:text="Institute Type"/>
     <View
         android:layout_width="match_parent"
