@@ -115,9 +115,9 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
         btnCam=(FancyButton) view.findViewById(R.id.btnCam);
         btnCancel=(FancyButton) view.findViewById(R.id.btnCancel);
 
-        btnSave.setIconResource(R.drawable.camera);
+      /*  btnSave.setIconResource(R.drawable.camera);
         btnCam.setIconResource(R.drawable.camera);
-        btnCancel.setIconResource(R.drawable.camera);
+        btnCancel.setIconResource(R.drawable.camera);*/
     }
 
     @Override
