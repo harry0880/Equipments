@@ -62,7 +62,7 @@ public class DataInput2 extends Fragment {
     {
         listview=(SwipeMenuListView) view.findViewById(R.id.listView);
         lvp=(ViewGroup.LayoutParams)listview.getLayoutParams();
-        btnAdd=(FancyButton) view.findViewById(R.id.btnAdd);
+        btnAdd=(FancyButton) view.findViewById(R.id.btnAddtoList);
         etSerialno=(EditText)view.findViewById(R.id.etSerialNumber);
         etDOI=(EditText)view.findViewById(R.id.DateOfInstallment);
         etDOInspec=(EditText)view.findViewById(R.id.DateOfInspection);

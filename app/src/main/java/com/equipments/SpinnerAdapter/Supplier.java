@@ -29,4 +29,10 @@ public class Supplier {
     }
 
     String EquipmentSupplier_detail;
+
+    public String toString()
+    {
+        return EquipmentSupplier_detail;
+    }
+
 }

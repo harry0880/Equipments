@@ -28,5 +28,10 @@ public class District {
         this.dcode_ds = dcode_ds;
     }
 
+    public String toString()
+    {
+        return dcode_ds;
+    }
+
     String ds_detail;
 }

@@ -62,7 +62,7 @@ public class DBConstant {
     public final static int C_No_of_Image=5;
 
 
-    public static final String CREATE_TABLE_District_Master= "CREATE TABLE "+ T_District_Master + "(" + C_Dist_Scode/*0*/ + " TEXT,"
+    public static final String CREATE_TABLE_District_Master= "CREATE TABLE "+ T_District_Master + "("
             + C_Dist_Code/*1*/ + " TEXT,"
             + C_Dist_Name/*2*/+ " TEXT);";
 

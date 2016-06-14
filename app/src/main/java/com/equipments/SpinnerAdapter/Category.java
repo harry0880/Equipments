@@ -30,5 +30,8 @@ public class Category {
 
     String Equipmentcategory_detail;
 
-
+    public String toString()
+    {
+        return Equipmentcategory_detail;
+    }
 }

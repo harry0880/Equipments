@@ -28,4 +28,9 @@ public class Institute {
     }
 
     String Institutetype_detail;
+
+    public String toString()
+    {
+        return Institutetype_detail;
+    }
 }

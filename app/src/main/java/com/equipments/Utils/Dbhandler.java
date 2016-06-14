@@ -81,10 +81,10 @@ public class Dbhandler extends SQLiteOpenHelper {
             return "Error";
         }
 
-        String[] Response= res.split("#"),JsonNames={"District","EquipmentCategory","EquipmentModel","Institutetype","EquipmentManufacturer","Institute","EquipmentSupplier","EquipmentNameMaster"};
+        String[] Response= res.split("#"),JsonNames={"District","EquipmentCategory","Institutetype","EquipmentManufacturer","Institute","EquipmentSupplier","EquipmentNameMaster"};
         int lengthJsonArr ;
         try {
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < JsonNames.length; i++) {
                 Response[i]="{ \""+JsonNames[i]+"\" :"+Response[i]+" }";
                 jsonResponse = new JSONObject(Response[i]);
                 JSONArray jsonMainNode = jsonResponse.optJSONArray(JsonNames[i]);
@@ -140,10 +140,10 @@ public class Dbhandler extends SQLiteOpenHelper {
                         writeableDB.close();
                     }
                     if(i==4){
-                        values.put(DBConstant.C_EquipmentId,jsonChildNode.optString("EquipmentManufacturer_id").toString());
-                        values.put(DBConstant.C_EquipmentName,jsonChildNode.optString("EquipmentManufacturer_detail").toString());
+                        values.put(DBConstant.C_ManufacturerID,jsonChildNode.optString("EquipmentManufacturer_id").toString());
+                        values.put(DBConstant.C_ManufacturerName,jsonChildNode.optString("EquipmentManufacturer_detail").toString());
                         SQLiteDatabase writeableDB = getWritableDatabase();
-                        writeableDB.insert(DBConstant.T_Equipment, null, values);
+                        writeableDB.insert(DBConstant.T_Manufacturer, null, values);
                         writeableDB.close();
 
                     }
@@ -182,7 +182,7 @@ public class Dbhandler extends SQLiteOpenHelper {
         cr.moveToFirst();
         ArrayList<District> list=new ArrayList<District>();
         do {
-            list.add(new District(cr.getString(1),cr.getString(2)));
+            list.add(new District(cr.getString(0),cr.getString(1)));
         }while (cr.moveToNext());
         return list;
     }
@@ -194,7 +194,7 @@ public class Dbhandler extends SQLiteOpenHelper {
         cr.moveToFirst();
         ArrayList<Category> list=new ArrayList<>();
         do {
-            list.add(new Category(cr.getString(1),cr.getString(2)));
+            list.add(new Category(cr.getString(0),cr.getString(1)));
         }while (cr.moveToNext());
         return list;
     }
@@ -206,7 +206,7 @@ public class Dbhandler extends SQLiteOpenHelper {
         cr.moveToFirst();
         ArrayList<InstituteType> list=new ArrayList<InstituteType>();
         do {
-            list.add(new InstituteType(cr.getString(1),cr.getString(2)));
+            list.add(new InstituteType(cr.getString(0),cr.getString(1)));
         }while (cr.moveToNext());
         return list;
     }
@@ -217,7 +217,7 @@ public class Dbhandler extends SQLiteOpenHelper {
         cr.moveToFirst();
         ArrayList<Manufacturer> list=new ArrayList<Manufacturer>();
         do {
-            list.add(new Manufacturer(cr.getString(1),cr.getString(2)));
+            list.add(new Manufacturer(cr.getString(0),cr.getString(1)));
         }while (cr.moveToNext());
         return list;
     }
@@ -229,7 +229,7 @@ public class Dbhandler extends SQLiteOpenHelper {
         cr.moveToFirst();
         ArrayList<Supplier> list=new ArrayList<Supplier>();
         do {
-            list.add(new Supplier(cr.getString(1),cr.getString(2)));
+            list.add(new Supplier(cr.getString(0),cr.getString(1)));
         }while (cr.moveToNext());
         return list;
     }
@@ -241,7 +241,7 @@ public class Dbhandler extends SQLiteOpenHelper {
         cr.moveToFirst();
         ArrayList<Institute> list=new ArrayList<Institute>();
         do {
-            list.add(new Institute(cr.getString(1),cr.getString(2)));
+            list.add(new Institute(cr.getString(0),cr.getString(1)));
         }while (cr.moveToNext());
         return list;
     }
@@ -252,7 +252,7 @@ public class Dbhandler extends SQLiteOpenHelper {
         cr.moveToFirst();
         ArrayList<Equipment> list=new ArrayList<Equipment>();
         do {
-            list.add(new Equipment(cr.getString(1),cr.getString(2)));
+            list.add(new Equipment(cr.getString(0),cr.getString(1)));
         }while (cr.moveToNext());
         return list;
     }

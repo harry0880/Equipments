@@ -30,4 +30,9 @@ public class Manufacturer {
 
     String EquipmentManufacturer_detail;
 
+    public String toString()
+    {
+        return EquipmentManufacturer_detail;
+    }
+
 }

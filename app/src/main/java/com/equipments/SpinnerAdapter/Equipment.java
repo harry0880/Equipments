@@ -29,4 +29,9 @@ public class Equipment {
     }
 
     String EquipmentNameMaster_detail;
+
+    public String toString()
+    {
+        return EquipmentNameMaster_detail;
+    }
 }

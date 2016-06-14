@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -216,7 +217,11 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-
+      /*  Bitmap bm=db.getImage(v.getId(),id);
+        if(bm!=null)
+            loadPhoto(bm);
+        else
+            Snackbar.make(v,"Save Image First !!!",Snackbar.LENGTH_SHORT).show();*/
     }
 
     private class Save_Photo_Async_Task extends AsyncTask<Void,Void,Boolean>

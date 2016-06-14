@@ -125,29 +125,100 @@
                 android:singleLine="false" />
         </android.support.design.widget.TextInputLayout>
 
-        <mehdi.sakout.fancybuttons.FancyButton
-            android:id="@+id/btnAdd"
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            fancy:fb_borderColor="#FFFFFF"
-            fancy:fb_borderWidth="1dp"
-            fancy:fb_defaultColor="@color/colorPrimaryDark"
-            fancy:fb_focusColor="@color/colorPrimary"
-            fancy:fb_fontIconResource="&#xf04b;"
-            fancy:fb_iconPosition="left"
-            fancy:fb_radius="30dp"
-            fancy:fb_text="Submit"
-            fancy:fb_textColor="#FFFFFF"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp">
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-            />
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:id="@+id/btnAddtoList"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    fancy:fb_borderColor="#FFFFFF"
+                    fancy:fb_borderWidth="1dp"
+                    fancy:fb_defaultColor="@color/colorPrimaryDark"
+                    fancy:fb_focusColor="@color/colorPrimary"
+                    fancy:fb_iconPosition="left"
+                    fancy:fb_radius="20dp"
+                    fancy:fb_text="Add to List"
+                    fancy:fb_textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginRight="5dp"
+
+                    /> <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/btnCancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                fancy:fb_borderColor="#FFFFFF"
+                fancy:fb_borderWidth="1dp"
+                fancy:fb_defaultColor="@color/colorPrimaryDark"
+                fancy:fb_focusColor="@color/colorPrimary"
+                fancy:fb_iconPosition="left"
+                fancy:fb_radius="30dp"
+                fancy:fb_text="Cancel"
+                fancy:fb_textColor="#FFFFFF"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp"
+                />
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">T
+                <mehdi.sakout.fancybuttons.FancyButton
+                    android:id="@+id/btndelete"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="10dp"
+                    fancy:fb_borderColor="#FFFFFF"
+                    fancy:fb_borderWidth="1dp"
+                    fancy:fb_defaultColor="@color/colorPrimaryDark"
+                    fancy:fb_focusColor="@color/colorPrimary"
+                    fancy:fb_iconPosition="left"
+                    fancy:fb_radius="30dp"
+                    fancy:fb_text="Delete"
+                    fancy:fb_textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginRight="5dp"
+
+                    /> <mehdi.sakout.fancybuttons.FancyButton
+                    android:id="@+id/btnUpdate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="10dp"
+                    fancy:fb_borderColor="#FFFFFF"
+                    fancy:fb_borderWidth="1dp"
+                    fancy:fb_defaultColor="@color/colorPrimaryDark"
+                    fancy:fb_focusColor="@color/colorPrimary"
+                    fancy:fb_iconPosition="left"
+                    fancy:fb_radius="30dp"
+                    fancy:fb_text="Update"
+                    fancy:fb_textColor="#FFFFFF"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="5dp"
+                    />
+            </TableRow>
+
+        </TableLayout>
+
+
 
 
       <com.baoyz.swipemenulistview.SwipeMenuListView
