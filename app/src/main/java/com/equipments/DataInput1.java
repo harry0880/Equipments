@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.equipments.SpinnerAdapter.Category;
@@ -27,7 +28,9 @@ public class DataInput1 extends Fragment {
   ArrayAdapter<InstituteType> instituteTypeAdapter;
   Dbhandler db;
   GetSet getset;
-
+  String Districtselected=null;
+  String Instituteypeselected=null;
+  Boolean District_spinner_flag=false,InstituteTypeSpinnerflag = false,InstituteSpinnerflag = false,CategorySpinnerflag = false,SupplierSpinnerflag = false ,ManufacturerSpinnerflag = false ,EquipmentSpinnerflag = false;
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
@@ -64,6 +67,116 @@ public class DataInput1 extends Fragment {
     spEquipment=(SearchableSpinner) view.findViewById(R.id.spEquipment);
     spInstitute=(SearchableSpinner) view.findViewById(R.id.spInstName);
     spDistrict=(SearchableSpinner) view.findViewById(R.id.spDist);
+
+    spDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(District_spinner_flag)
+        {
+          District district=((District) spDistrict.getSelectedItem());
+          getset.setDcode_ds(district.getDcode_ds());
+          Districtselected = district.getDcode_ds().toString();
+        }
+        District_spinner_flag=true;
+      }
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+      }
+    });
+    spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(CategorySpinnerflag)
+        {
+          Category category = ((Category)spCategory.getSelectedItem());
+          getset.setEquipmentcategory_id(category.getEquipmentcategory_id());
+        }
+        CategorySpinnerflag=true;
+      }
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+      }
+    });
+    spSupplier.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(SupplierSpinnerflag)
+        {
+          Supplier supplier = ((Supplier)spSupplier.getSelectedItem());
+
+          getset.setEquipmentSupplier_id(supplier.getEquipmentSupplier_id());
+        }
+        SupplierSpinnerflag=true;
+      }
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+      }
+    });
+    spManufacturer.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(ManufacturerSpinnerflag)
+        {
+          Manufacturer manufacturer =((Manufacturer)spManufacturer.getSelectedItem());
+          getset.setEquipmentManufacturer_id(manufacturer.getEquipmentManufacturer_id());
+        }
+        ManufacturerSpinnerflag=true;
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+
+      }
+    });
+    spEquipment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+      @Override
+      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(EquipmentSpinnerflag)
+        {
+          Equipment eq = ((Equipment) spEquipment.getSelectedItem());
+          getset.setEquipmentNameMaster_id(eq.getEquipmentNameMaster_id());
+        }
+        EquipmentSpinnerflag=true;
+      }
+
+      @Override
+      public void onNothingSelected(AdapterView<?> parent) {
+
+      }
+    });
+    spInstitute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+  @Override
+  public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+       if(InstituteSpinnerflag)
+       {
+         Institute institute = ((Institute)spInstitute.getSelectedItem());
+         getset.setInstid(institute.getInstitute_id());
+              }
+    InstituteSpinnerflag=true;
+  }
+
+  @Override
+  public void onNothingSelected(AdapterView<?> parent) {
+
+  }
+});
+    spInstType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+  @Override
+  public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    if(InstituteTypeSpinnerflag) {
+      InstituteType intype = ((InstituteType) spInstType.getSelectedItem());
+      getset.setInstitutetype_id(intype.getInstitutetype_id());
+      Instituteypeselected=intype.getInstitutetype_id().toString();
+    }
+    InstituteTypeSpinnerflag=true;
+  }
+
+  @Override
+  public void onNothingSelected(AdapterView<?> parent) {
+
+  }
+});
+
   }
 
   void setInstType()
@@ -106,7 +219,7 @@ public class DataInput1 extends Fragment {
     spSupplier.setTitle("Supplier");
   }
 
-/*  void setInstitute()
+/* void setInstitute()
   {
     ArrayAdapter<String> Adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, db.getInstitute());
     Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -121,15 +234,17 @@ public class DataInput1 extends Fragment {
     spCategory.setTitle("Category");
   }
 
-  void savedata()
+  void savedata1()
   {
     ContentValues cv=new ContentValues();
     cv.put(DBConstant.C_Dist_Code,getset.getDcode_ds());
     cv.put(DBConstant.C_Doc_Inst_TypeID,getset.getInstitutetype_id());
+    cv.put(DBConstant.C_Doc_Inst_ID,getset.getInstid());
     cv.put(DBConstant.C_EquipmentId,getset.getEquipmentNameMaster_id());
-    cv.put(DBConstant.C_SupplierId,getset.getEquipmentSupplier_id());
     cv.put(DBConstant.C_CategoryId,getset.getEquipmentcategory_id());
     cv.put(DBConstant.C_ManufacturerID,getset.getEquipmentManufacturer_id());
-    cv.put(DBConstant.C_Doc_Inst_ID,getset.getInstid());
+    cv.put(DBConstant.C_SupplierId,getset.getEquipmentSupplier_id());
+
+
   }
 }

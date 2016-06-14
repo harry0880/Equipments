@@ -4,28 +4,32 @@ package com.equipments.SpinnerAdapter;
  * Created by Administrator on 13/06/2016.
  */
 public class Institute {
-    public Institute(String institutetype_id, String institutetype_detail) {
-        Institutetype_id = institutetype_id;
-        Institutetype_detail = institutetype_detail;
+    public Institute(String institute_id, String institute_detail) {
+
+        this.Institute_id = institute_id;
+        this.Institute_detail = institute_detail;
+
+        Institute_id = institute_id;
+        Institute_detail = institute_detail;
     }
 
-    String Institutetype_id;
+    String Institute_id;
 
-    public String getInstitutetype_detail() {
-        return Institutetype_detail;
+    public String getInstitute_detail() {
+        return Institute_detail;
     }
 
-    public void setInstitutetype_detail(String institutetype_detail) {
-        Institutetype_detail = institutetype_detail;
+    public void setInstitute_detail(String institute_detail) {
+        Institute_detail = institute_detail;
     }
 
-    public String getInstitutetype_id() {
-        return Institutetype_id;
+    public String getInstitute_id() {
+        return Institute_id;
     }
 
-    public void setInstitutetype_id(String institutetype_id) {
-        Institutetype_id = institutetype_id;
+    public void setInstitute_id(String institute_id) {
+        Institute_id = institute_id;
     }
 
-    String Institutetype_detail;
+    String Institute_detail;
 }
