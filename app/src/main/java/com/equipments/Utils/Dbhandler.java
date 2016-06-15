@@ -22,6 +22,7 @@ import com.equipments.SpinnerAdapter.Supplier;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.PropertyInfo;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
@@ -34,10 +35,17 @@ import java.util.ArrayList;
  */
 public class Dbhandler extends SQLiteOpenHelper {
 
-    String LoadMasterMathod = "master";
-    String SoapLinkMaster="http://tempuri.org/master";
+
     final String NameSpace="http://tempuri.org/";
     String URL="http://10.88.229.42:90/Service.asmx";
+
+    String LoadMasterMathod = "master";
+    String SoapLinkMaster="http://tempuri.org/master";
+
+    String SendEquipmentsEnntry = "getEquipmentsEnntry";
+    String SoapLinkSendEquipmentsEnntry="http://tempuri.org/getEquipmentsEnntry";
+
+
     static String Id="0";
     JSONObject jsonResponse ;
 
@@ -65,8 +73,6 @@ public class Dbhandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
-
-
 
     public String Load_Master_tables()
     {
@@ -180,7 +186,145 @@ public class Dbhandler extends SQLiteOpenHelper {
         }
         return  "Success";
     }
+public Boolean SendEquipmentEntries(String id) {
+    SQLiteDatabase db = getReadableDatabase();
+    Cursor cursor = db.rawQuery("select * from " + DBConstant.T_Inspection_Entries + ";", null);
+    cursor.moveToFirst();
+    if (cursor.getCount() <= 0) {
+        return false;
+    } else {
+        do {
+            String res = null;
+            SoapObject request = new SoapObject(NameSpace, SendEquipmentsEnntry);
+            PropertyInfo pi = new PropertyInfo();
 
+            pi.setName("AndroidRowId");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ID)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+
+          pi = new PropertyInfo();
+            pi.setName("UserId");
+              pi.setValue("userid");
+          /*  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.))); add username*/
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("DistrictId");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Dist_Code)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("InstituteTypeId");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Doc_Inst_TypeID)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("InstituteId");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Doc_Inst_ID)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("EquipmentId");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_EquipmentId)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("EquipmentCategoryId");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_CategoryId)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("ManufacturerNameId");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ManufacturerID)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("SuplierNameId");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_SupplierId)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("ModelNameId");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ModelId)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("SerialNumber");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_SerialNo)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("InstallationDate");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_DateOfInstallment)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("InspectionDate");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_DateOfInspection)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("AdnroidEntryDate");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_DateOfInspectionGPS)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+
+            pi = new PropertyInfo();
+            pi.setName("Location");
+            pi.setValue("Loc");
+        /*    pi.setValue(cursor.getString(cursor.getColumnIndex())); location*/
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("Remarks");
+            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Remarks)));
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+            pi = new PropertyInfo();
+            pi.setName("CreatedBy");
+            pi.setValue("createdby");
+            /*pi.setValue(cursor.getString(cursor.getColumnIndex())); username*/
+            pi.setType(String.class);
+            request.addProperty(pi);
+
+
+            SoapSerializationEnvelope envolpe = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+            envolpe.dotNet = true;
+            envolpe.setOutputSoapObject(request);
+            HttpTransportSE androidHTTP = new HttpTransportSE(URL);
+
+            try {
+                androidHTTP.call(SoapLinkSendEquipmentsEnntry, envolpe);
+                SoapPrimitive response = (SoapPrimitive) envolpe.getResponse();
+                res = response.toString();
+                //System.out.println(res);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        } while (cursor.moveToNext());
+
+
+    }
+}
     public ArrayList<District> getDistrict()
     {
         SQLiteDatabase db=getReadableDatabase();
