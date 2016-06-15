@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
 
+import com.equipments.GettersSetters.CardGetSet;
 import com.equipments.SpinnerAdapter.Category;
 import com.equipments.SpinnerAdapter.District;
 import com.equipments.SpinnerAdapter.Equipment;
@@ -489,6 +491,23 @@ public Boolean SendEquipmentEntries(String id) {
         cr.moveToFirst();
         return cr.getString(0);
 
+    }
+
+    public ArrayList<CardGetSet> getCardData()
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select * from " + DBConstant.T_Inspection_Entries + ";", null);
+        cr.moveToFirst();
+        ArrayList<CardGetSet> arr=new ArrayList<>();
+        if(cr.getCount()>0)
+        {
+            do {
+              arr.add(new CardGetSet(cr.getString(cr.getColumnIndex(DBConstant.C_ID)),getInstName(cr.getString(cr.getColumnIndex(DBConstant.C_Doc_Inst_TypeID))),getInstName(cr.getString(cr.getColumnIndex(DBConstant.C_EquipmentId)))));
+            }while(cr.moveToNext());
+
+        }
+        db.close();
+        return arr;
     }
 
     public ArrayList<Cursor> getData(String Query) {
