@@ -1,6 +1,7 @@
 package com.equipments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import com.equipments.Utils.AndroidDatabaseManager;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
@@ -43,9 +45,11 @@ public class Main extends AppCompatActivity {
 
         FragmentPagerItems pages = new FragmentPagerItems(this);
 
-        pages.add(FragmentPagerItem.of("1", DataInput1.class));
-        pages.add(FragmentPagerItem.of("2", DataInput2.class));
-        pages.add(FragmentPagerItem.of("3", DataInput3.class));
+        pages.add(FragmentPagerItem.of("Location", DataInput1.class));
+        pages.add(FragmentPagerItem.of("Equipments 1", DataInput4.class));
+        pages.add(FragmentPagerItem.of("Equipments 2", DataInput2.class));
+        pages.add(FragmentPagerItem.of("Snap", DataInput3.class));
+
 
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), pages);
@@ -57,5 +61,9 @@ public class Main extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(Main.this, AndroidDatabaseManager.class));
+        super.onBackPressed();
+    }
 }

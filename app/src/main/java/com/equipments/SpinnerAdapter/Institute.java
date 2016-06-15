@@ -32,4 +32,9 @@ public class Institute {
     }
 
     String Institute_detail;
+
+    public String toString()
+    {
+       return Institute_detail;
+    }
 }

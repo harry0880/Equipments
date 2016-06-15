@@ -32,6 +32,7 @@ public class Splash extends AppCompatActivity {
         else
         {
             startActivity(new Intent(Splash.this,Main.class));
+            finish();
         }
 
     }
@@ -63,7 +64,7 @@ public class Splash extends AppCompatActivity {
             }
             else {
                startActivity(new Intent(Splash.this, Main.class));
-
+                finish();
             }
             super.onPostExecute(s);
         }

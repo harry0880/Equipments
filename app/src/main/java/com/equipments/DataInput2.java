@@ -1,5 +1,7 @@
 package com.equipments;
 
+import android.content.ContentValues;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,8 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.equipments.Utils.Barcode;
+import com.equipments.Utils.DBConstant;
+import com.equipments.Utils.Dbhandler;
+import com.equipments.Utils.SimpleScannerFragment;
+import com.equipments.Utils.SimpleScannerFragmentActivity;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.util.ArrayList;
@@ -25,13 +33,18 @@ public class DataInput2 extends Fragment {
     EditText etSerialno,etDOI,etDOInspec,etRemarks;
     SearchableSpinner spInstType;
     FancyButton btnAdd;
+    ImageButton barcode;
+    Barcode barcodee;
+    String idd;
+    Dbhandler db;
     private final String[] array = {"Hello"};
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_datainput2, container, false);
+        final View view= inflater.inflate(R.layout.fragment_datainput2, container, false);
+/*       idd=  container.getTag().toString();*/
 
-
+        db=new Dbhandler(getActivity());
         return view;
     }
 
@@ -45,6 +58,13 @@ public class DataInput2 extends Fragment {
                 android.R.layout.simple_list_item_1, android.R.id.text1, teamMember);
         listview.setAdapter(dataAdapter);
 
+        barcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            startActivity(new Intent(getContext(),SimpleScannerFragmentActivity.class));
+            }
+        });
+
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +77,7 @@ public class DataInput2 extends Fragment {
         });
 
 
+
     }
     void initialize(View view)
     {
@@ -66,14 +87,23 @@ public class DataInput2 extends Fragment {
         etSerialno=(EditText)view.findViewById(R.id.etSerialNumber);
         etDOI=(EditText)view.findViewById(R.id.DateOfInstallment);
         etDOInspec=(EditText)view.findViewById(R.id.DateOfInspection);
+        barcode=(ImageButton) view.findViewById(R.id.barcode);
+        barcodee=new Barcode();
+    }
 
-
+    void SaveData()
+    {
+        ContentValues cv =new ContentValues();
+        cv.put(DBConstant.C_SerialNo,etSerialno.getText().toString());
+        cv.put(DBConstant.C_DateOfInstallment,etDOI.getText().toString());
+        cv.put(DBConstant.C_DateOfInspection,etDOInspec.getText().toString());
+        db.savefrag3(cv,db.getId());
     }
 
 
-
-
-
-
-
+    @Override
+    public void onResume() {
+        etSerialno.setText(barcodee.getBarcodee());
+        super.onResume();
+    }
 }

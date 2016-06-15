@@ -3,8 +3,13 @@ package com.equipments.Utils;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.util.Log;
 
 import com.equipments.SpinnerAdapter.Category;
 import com.equipments.SpinnerAdapter.District;
@@ -33,7 +38,7 @@ public class Dbhandler extends SQLiteOpenHelper {
     String SoapLinkMaster="http://tempuri.org/master";
     final String NameSpace="http://tempuri.org/";
     String URL="http://10.88.229.42:90/Service.asmx";
-
+    static String Id="0";
     JSONObject jsonResponse ;
 
     public Dbhandler(Context context) {
@@ -52,6 +57,7 @@ public class Dbhandler extends SQLiteOpenHelper {
         db.execSQL(DBConstant.CREATE_TABLE_Manufacturer_Master);
         db.execSQL(DBConstant.CREATE_TABLE_Model_Master);
         db.execSQL(DBConstant.CREATE_TABLE_Supplier_Master);
+        db.execSQL(DBConstant.Create_Table_Image);
         
     }
 
@@ -234,15 +240,17 @@ public class Dbhandler extends SQLiteOpenHelper {
         return list;
     }
 
-    public ArrayList<Institute> getInstitute(String District)
-    {
-        SQLiteDatabase db=getReadableDatabase();
-        Cursor cr=db.rawQuery("select * from "+DBConstant.T_Doc_Inst+" where "+DBConstant.C_Dist_Code+" ="+District,null);
+    public ArrayList<Institute> getInstitute(String District,String InstituteType) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cr = db.rawQuery("select * from " + DBConstant.T_Doc_Inst + " where " + DBConstant.C_Dist_Code + " ='" + District + "' and " + DBConstant.C_Doc_Inst_TypeID + "='" + InstituteType + "'", null);
         cr.moveToFirst();
-        ArrayList<Institute> list=new ArrayList<Institute>();
-        do {
-            list.add(new Institute(cr.getString(0),cr.getString(1)));
-        }while (cr.moveToNext());
+        ArrayList<Institute> list = new ArrayList<Institute>();
+        if (cr.getCount() > 0)
+        {
+            do {
+                list.add(new Institute(cr.getString(0), cr.getString(1)));
+            } while (cr.moveToNext());
+    }
         return list;
     }
     public ArrayList<Equipment> getEquipment()
@@ -256,4 +264,113 @@ public class Dbhandler extends SQLiteOpenHelper {
         }while (cr.moveToNext());
         return list;
     }
+
+    public long SaveFrag1(ContentValues cv)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        long id=db.insert(DBConstant.T_Inspection_Entries,null,cv);
+        Id=id+"";
+        db.close();
+        return id;
+
+    }
+
+    public String getId()
+    {
+        return  Id;
+    }
+
+    public void UpdateFrag2(ContentValues cv,String idd)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        db.update(DBConstant.T_Inspection_Entries,cv,DBConstant.C_ID+"='"+idd+"'",null);
+        db.close();
+    }
+
+    public void savefrag3(ContentValues cv,String idd)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        db.update(DBConstant.T_Inspection_Entries,cv,DBConstant.C_ID+"='"+idd+"'",null);
+        db.close();
+    }
+
+    public Boolean saveimg(ContentValues cv)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        if(db.insert(DBConstant.TBL_Img_Data,null,cv)!=-1)
+            return true;
+        else
+            return false;
+    }
+
+    public Bitmap getImage(int id, String UserID)
+    {
+        Bitmap decodedByte;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor result=null;
+        try {
+            result=db.rawQuery("select * from " + DBConstant.TBL_Img_Data + " where " + DBConstant.C_Image_Id + "='" +id+ "' and "+DBConstant.C_ID+"='"+UserID+"';",null);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        int d=result.getCount();
+        if (result.getCount() <= 0)
+        {
+            return null;
+        }
+        result.moveToFirst();
+
+        do {
+            byte[] arr= Base64.decode(result.getString(1), Base64.DEFAULT);
+            decodedByte = BitmapFactory.decodeByteArray(arr, 0, arr.length);
+        } while (result.moveToNext());
+        db.close();
+        return decodedByte;
+    }
+
+    public ArrayList<Cursor> getData(String Query) {
+        //get writable database
+        SQLiteDatabase sqlDB = this.getWritableDatabase();
+        String[] columns = new String[] { "mesage" };
+        //an array list of cursor to save two cursors one has results from the query
+        //other cursor stores error message if any errors are triggered
+        ArrayList<Cursor> alc = new ArrayList<Cursor>(2);
+        MatrixCursor Cursor2= new MatrixCursor(columns);
+        alc.add(null);
+        alc.add(null);
+
+
+        try{
+            String maxQuery = Query ;
+            //execute the query results will be save in Cursor c
+            Cursor c = sqlDB.rawQuery(maxQuery, null);
+
+
+            //add value to cursor2
+            Cursor2.addRow(new Object[] { "Success" });
+
+            alc.set(1,Cursor2);
+            if (null != c && c.getCount() > 0) {
+
+
+                alc.set(0,c);
+                c.moveToFirst();
+
+                return alc ;
+            }
+            return alc;
+        } catch(Exception sqlEx){
+            Log.d("printing exception", sqlEx.getMessage());
+            //if any exceptions are triggered save the error message to cursor an return the arraylist
+            Cursor2.addRow(new Object[] { ""+sqlEx.getMessage() });
+            alc.set(1,Cursor2);
+            return alc;
+        }
+
+
+    }
+
+
 }

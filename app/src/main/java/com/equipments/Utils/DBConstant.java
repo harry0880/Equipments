@@ -49,6 +49,7 @@ public class DBConstant {
     public static final String T_Inspection_Entries="InspectionEntries";
 
     public static final String C_ID="Id";
+    public static final String C_SerialNo="SerialNo";
     public static final String C_DateOfInstallment="DateOfInstallment";
     public static final String C_Remarks="Remarks";
     public static final String C_DateOfInspection="DateOfInspection";
@@ -62,8 +63,7 @@ public class DBConstant {
     public final static int C_No_of_Image=5;
 
 
-    public static final String CREATE_TABLE_District_Master= "CREATE TABLE "+ T_District_Master + "("
-            + C_Dist_Code/*1*/ + " TEXT,"
+    public static final String CREATE_TABLE_District_Master= "CREATE TABLE "+ T_District_Master + "(" + C_Dist_Code/*1*/ + " TEXT,"
             + C_Dist_Name/*2*/+ " TEXT);";
 
     public static final String CREATE_TABLE_Institute_Type_Master = "CREATE TABLE "+ T_Doc_Inst_Type + "(" + C_Doc_Inst_TypeID/*0*/ + " TEXT,"
@@ -92,14 +92,16 @@ public class DBConstant {
             +C_TeamMemberName+" TEXT,"
             + C_TeamMemberDesignation+ " TEXT);";
 
-    public static final String CREATE_TABLE_Equipment_Entries= "CREATE TABLE "+ T_Inspection_Entries + "(" + C_ID + " TEXT,"
+    public static final String CREATE_TABLE_Equipment_Entries= "CREATE TABLE "+ T_Inspection_Entries + "(" + C_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + C_Dist_Code+ " TEXT,"
             +C_Doc_Inst_ID+" TEXT,"
+            +C_Doc_Inst_TypeID+" TEXT,"
             +C_CategoryId+ " TEXT,"
             +C_ManufacturerID+" TEXT,"
             +C_ModelId+" TEXT,"
             +C_EquipmentId+" TEXT,"
             +C_SupplierId+" TEXT,"
+            +C_SerialNo+" TEXT,"
             +C_DateOfInstallment+" TEXT,"
             +C_DateOfInspection+" TEXT,"
             +C_DateOfInspectionGPS+" TEXT,"

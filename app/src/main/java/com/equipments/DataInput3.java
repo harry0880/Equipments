@@ -1,5 +1,9 @@
 package com.equipments;
 
+import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -13,6 +17,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +30,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.equipments.Utils.DBConstant;
+import com.equipments.Utils.Dbhandler;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -48,15 +55,17 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
     ImageView img,imgThumb[] ;
     RelativeLayout bar;
     EditText imdesc;
+    String Id;
     static int img_cnt = 0;
     LinearLayout imagelayout;
     FancyButton btnSave,btnCam,btnCancel;
-
+    Dbhandler db;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_datainput3, container, false);
+
 
         return view;
     }
@@ -65,6 +74,7 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         initialize(view);
+        Id=db.getId();
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +111,7 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
     {
         btnCamera=(ImageButton) view.findViewById(R.id.btnCamera);
 
+        db=new Dbhandler(getActivity());
         bar=(RelativeLayout)view.findViewById(R.id.loadingPane);
         bar.setVisibility(View.GONE);
 
@@ -115,9 +126,6 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
         btnCam=(FancyButton) view.findViewById(R.id.btnCam);
         btnCancel=(FancyButton) view.findViewById(R.id.btnCancel);
 
-      /*  btnSave.setIconResource(R.drawable.camera);
-        btnCam.setIconResource(R.drawable.camera);
-        btnCancel.setIconResource(R.drawable.camera);*/
     }
 
     @Override
@@ -217,11 +225,47 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-      /*  Bitmap bm=db.getImage(v.getId(),id);
+        Bitmap bm=db.getImage(v.getId(),Id);
         if(bm!=null)
-            loadPhoto(bm);
+            loadPhoto(bm,v);
         else
-            Snackbar.make(v,"Save Image First !!!",Snackbar.LENGTH_SHORT).show();*/
+            Snackbar.make(v,"Save Image First !!!",Snackbar.LENGTH_SHORT).show();
+    }
+    private void loadPhoto(Bitmap bitmap,View v) {
+
+        AlertDialog.Builder imageDialog = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View layout = inflater.inflate(R.layout.dialog,
+                (ViewGroup) v.findViewById(R.id.layout_root));
+        ImageView image = (ImageView) layout.findViewById(R.id.fullimage);
+        image.setImageBitmap(bitmap);
+        imageDialog.setView(layout);
+        imageDialog.setPositiveButton("Close", new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        imageDialog.create();
+        imageDialog.show();
+    }
+
+
+    private Boolean save_photo()
+    {
+        ContentValues cv=new ContentValues();
+        cv.put(DBConstant.C_ID, Id);
+        cv.put(DBConstant.C_Image, imgConversion(processedBitmap));
+        cv.put(DBConstant.C_Image_Id,img_cnt+1);
+        cv.put(DBConstant.C_Image_Desc, imdesc.getText().toString());
+        return db.saveimg(cv);
+    }
+    private String imgConversion(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
 
     private class Save_Photo_Async_Task extends AsyncTask<Void,Void,Boolean>
@@ -234,7 +278,7 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            return true;//save_photo();
+            return save_photo();
         }
 
         @Override

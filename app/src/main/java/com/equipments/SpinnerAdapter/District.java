@@ -30,7 +30,7 @@ public class District {
 
     public String toString()
     {
-        return dcode_ds;
+        return ds_detail;
     }
 
     String ds_detail;

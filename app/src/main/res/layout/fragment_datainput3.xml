@@ -12,10 +12,11 @@
         android:orientation="horizontal">
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/l1"
+        android:weightSum="100"
         android:orientation="horizontal">
 
         <TextView
@@ -23,23 +24,27 @@
             android:layout_height="wrap_content"
             android:text="Image Desc"
             android:id="@+id/tv1"
+            android:layout_weight="10"
             />
 
         <EditText
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
             android:id="@+id/desc"
             android:layout_below="@id/tv1"
+            android:layout_weight="80"
+
             />
         <ImageButton
 
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignRight="@+id/desc"
             android:id="@+id/btnCamera"
+            android:src="@drawable/barcode"
+            android:layout_weight="10"
             android:background="#00000000"/>
-    </RelativeLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
