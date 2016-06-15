@@ -30,11 +30,13 @@ public class DataInput2 extends Fragment {
     ViewGroup.LayoutParams lvp;
     EditText etSerialno,etDOI,etDOInspec,etRemarks;
     SearchableSpinner spInstType;
-    FancyButton btnAdd;
+    FancyButton btnAdd,btnUpdate,btnCancel,btnDelete;
     ImageButton barcode;
     Barcode barcodee;
     String idd;
     Dbhandler db;
+    static int cnt=0;
+    ContentValues[] contentValues;
     private final String[] array = {"Hello"};
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -82,6 +84,9 @@ public class DataInput2 extends Fragment {
         listview=(SwipeMenuListView) view.findViewById(R.id.listView);
         lvp=(ViewGroup.LayoutParams)listview.getLayoutParams();
         btnAdd=(FancyButton) view.findViewById(R.id.btnAddtoList);
+        btnCancel=(FancyButton) view.findViewById(R.id.btnCancel);
+        btnUpdate=(FancyButton) view.findViewById(R.id.btnUpdate);
+        btnDelete=(FancyButton) view.findViewById(R.id.btndelete);
         etSerialno=(EditText)view.findViewById(R.id.etSerialNumber);
         etDOI=(EditText)view.findViewById(R.id.DateOfInstallment);
         etDOInspec=(EditText)view.findViewById(R.id.DateOfInspection);
