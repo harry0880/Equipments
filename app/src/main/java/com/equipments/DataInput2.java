@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.equipments.Utils.Barcode;
+import com.equipments.GettersSetters.Barcode;
 import com.equipments.Utils.DBConstant;
 import com.equipments.Utils.Dbhandler;
-import com.equipments.Utils.SimpleScannerFragment;
 import com.equipments.Utils.SimpleScannerFragmentActivity;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 

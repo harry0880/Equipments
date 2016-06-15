@@ -6,11 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.equipments.GettersSetters.Barcode;
 import com.google.zxing.Result;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class SimpleScannerFragment extends Fragment implements ZXingScannerView.ResultHandler {

@@ -10,18 +10,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import com.equipments.SpinnerAdapter.Category;
+import com.equipments.GettersSetters.GetSet;
 import com.equipments.SpinnerAdapter.District;
-import com.equipments.SpinnerAdapter.Equipment;
 import com.equipments.SpinnerAdapter.Institute;
 import com.equipments.SpinnerAdapter.InstituteType;
-import com.equipments.SpinnerAdapter.Manufacturer;
-import com.equipments.SpinnerAdapter.Supplier;
 import com.equipments.Utils.DBConstant;
 import com.equipments.Utils.Dbhandler;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
-
-import java.util.ArrayList;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 

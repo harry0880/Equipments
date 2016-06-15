@@ -1,4 +1,4 @@
-package com.equipments.Utils;
+package com.equipments.GettersSetters;
 
 /**
  * Created by Administrator on 14/06/2016.

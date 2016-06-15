@@ -474,6 +474,23 @@ public Boolean SendEquipmentEntries(String id) {
         return decodedByte;
     }
 
+    public String getEquipmentName(String EqipId)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select "+DBConstant.C_EquipmentName+" from "+DBConstant.T_Equipment+" where "+DBConstant.C_EquipmentId+"='"+EqipId+"'",null);
+        cr.moveToFirst();
+        return cr.getString(0);
+    }
+
+    public String getInstName(String InstId)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select "+DBConstant.C_Doc_Inst_Detail+" from "+DBConstant.T_Doc_Inst+" where "+DBConstant.C_Doc_Inst_ID+"='"+InstId+"'",null);
+        cr.moveToFirst();
+        return cr.getString(0);
+
+    }
+
     public ArrayList<Cursor> getData(String Query) {
         //get writable database
         SQLiteDatabase sqlDB = this.getWritableDatabase();
@@ -512,7 +529,6 @@ public Boolean SendEquipmentEntries(String id) {
             alc.set(1,Cursor2);
             return alc;
         }
-
 
     }
 

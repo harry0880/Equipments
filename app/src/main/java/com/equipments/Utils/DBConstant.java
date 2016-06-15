@@ -48,7 +48,7 @@ public class DBConstant {
 
     public static final String T_Inspection_Entries="InspectionEntries";
 
-    public static final String C_ID="Id";
+    public static final String C_ID="_id";
     public static final String C_SerialNo="SerialNo";
     public static final String C_DateOfInstallment="DateOfInstallment";
     public static final String C_Remarks="Remarks";
