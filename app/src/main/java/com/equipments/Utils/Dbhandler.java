@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
@@ -502,7 +501,7 @@ public Boolean SendEquipmentEntries(String id) {
         if(cr.getCount()>0)
         {
             do {
-              arr.add(new CardGetSet(cr.getString(cr.getColumnIndex(DBConstant.C_ID)),getInstName(cr.getString(cr.getColumnIndex(DBConstant.C_Doc_Inst_TypeID))),getInstName(cr.getString(cr.getColumnIndex(DBConstant.C_EquipmentId)))));
+              arr.add(new CardGetSet(cr.getString(cr.getColumnIndex(DBConstant.C_ID)),getInstName(cr.getString(cr.getColumnIndex(DBConstant.C_Doc_Inst_ID))),getEquipmentName(cr.getString(cr.getColumnIndex(DBConstant.C_EquipmentId)))));
             }while(cr.moveToNext());
 
         }

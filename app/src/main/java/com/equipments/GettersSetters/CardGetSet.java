@@ -10,29 +10,6 @@ public class CardGetSet {
         Machineryname = machineryname;
     }
 
-    public String getId() {
-        return Id;
-    }
 
-    public void setId(String id) {
-        Id = id;
-    }
-
-    public String getIntituteType() {
-        return IntituteType;
-    }
-
-    public void setIntituteType(String intituteType) {
-        IntituteType = intituteType;
-    }
-
-    public String getMachineryname() {
-        return Machineryname;
-    }
-
-    public void setMachineryname(String machineryname) {
-        Machineryname = machineryname;
-    }
-
-    String Id,IntituteType,Machineryname="Not Available";
+    public String Id,IntituteType,Machineryname="Not Available";
 }
