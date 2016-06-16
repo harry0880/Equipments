@@ -2,11 +2,13 @@ package com.equipments;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -17,10 +19,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.equipments.GettersSetters.GetSet;
+import com.equipments.GettersSetters.InpectionId;
+import com.equipments.GettersSetters.Time;
 import com.equipments.Utils.AndroidDatabaseManager;
 import com.equipments.Utils.Dbhandler;
 import com.google.android.gms.common.ConnectionResult;
@@ -36,7 +44,9 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
 import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -64,7 +74,7 @@ public class Main extends AppCompatActivity  implements
     private static int FATEST_INTERVAL = 5000; // 5 sec
     private static int DISPLACEMENT = 10; // 10 meters
     private static final int REQUEST_Permission = 0;
-
+    ViewPager viewPager;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +89,7 @@ public class Main extends AppCompatActivity  implements
         ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
         tab.addView(LayoutInflater.from(this).inflate(R.layout.tabs, tab, false));
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+      viewPager = (ViewPager) findViewById(R.id.viewpager);
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 
         FragmentPagerItems pages = new FragmentPagerItems(this);
@@ -227,11 +237,8 @@ void initialize_Location()
             double latitude = mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
             com.equipments.GettersSetters.Location.setLocation(latitude+" "+longitude);
-            Toast.makeText(context,latitude+" ,"+longitude,Toast.LENGTH_SHORT).show();
-
-        } else {
-
-
+          /*  Toast.makeText(context,latitude+" "+longitude,Toast.LENGTH_SHORT).show();*/
+            Time.setTime(get_Time());
         }
     }
 
@@ -239,7 +246,14 @@ void initialize_Location()
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
+    private String get_Time()
+    {
+        long loc=mLastLocation.getTime();
+        Date dt=new Date(loc);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = sdf.format(dt);
+        return time;
+    }
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation=location;
@@ -265,6 +279,14 @@ void initialize_Location()
     @Override
     public void onBackPressed() {
         startActivity(new Intent(Main.this, AndroidDatabaseManager.class));
+        InpectionId.setId("-1");
         super.onBackPressed();
     }
+    public void switchFragment(){
+        viewPager.setCurrentItem(viewPager.getCurrentItem()+1);
+    }
+
+
+
+
 }

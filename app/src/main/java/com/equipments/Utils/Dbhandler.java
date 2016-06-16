@@ -46,7 +46,6 @@ public class Dbhandler extends SQLiteOpenHelper {
     String SendEquipmentsEnntry = "getEquipmentsEnntry";
     String SoapLinkSendEquipmentsEnntry="http://tempuri.org/getEquipmentsEnntry";
 
-
     static String Id="0";
     JSONObject jsonResponse ;
 
@@ -72,7 +71,7 @@ public class Dbhandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL(DBConstant.CREATE_TABLE_Equipment_Entries);
     }
 
     public String Load_Master_tables()
@@ -124,14 +123,6 @@ public class Dbhandler extends SQLiteOpenHelper {
                         writeableDB.insert(DBConstant.T_Doc_Inst_Type, null, values);
                         writeableDB.close();
                     }
-                    /*if(i==2)
-                    {
-                        values.put(DBConstant.C_Doc_Spl_ID,jsonChildNode.optString("Equipmentmodel_id").toString());
-                        values.put(DBConstant.C_Doc_Spl_Detail,jsonChildNode.optString("Equipmentmodel_detail").toString());
-                        SQLiteDatabase writeableDB = getWritableDatabase();
-                        writeableDB.insert(DBConstant.T_Doc_Spl_Type, null, values);
-                        writeableDB.close();
-                    }*/
                     if(i==2)
                     {
 
@@ -145,7 +136,6 @@ public class Dbhandler extends SQLiteOpenHelper {
                     }
                     if(i==3)
                     {
-
                         values.put(DBConstant.C_CategoryId,jsonChildNode.optString("Equipmentcategory_id").toString());
                         values.put(DBConstant.C_CategoryName,jsonChildNode.optString("Equipmentcategory_detail").toString());
                         SQLiteDatabase writeableDB = getWritableDatabase();
@@ -158,11 +148,9 @@ public class Dbhandler extends SQLiteOpenHelper {
                         SQLiteDatabase writeableDB = getWritableDatabase();
                         writeableDB.insert(DBConstant.T_Manufacturer, null, values);
                         writeableDB.close();
-
                     }
                     if(i==5)
                     {
-
                         values.put(DBConstant.C_EquipmentId,jsonChildNode.optString("EquipmentNameMaster_id").toString());
                         values.put(DBConstant.C_EquipmentName,jsonChildNode.optString("EquipmentNameMaster_detail").toString());
                         SQLiteDatabase writeableDB = getWritableDatabase();
@@ -187,143 +175,146 @@ public class Dbhandler extends SQLiteOpenHelper {
         }
         return  "Success";
     }
-public Boolean SendEquipmentEntries(String id) {
+public Boolean SendEquipmentEntries() {
     SQLiteDatabase db = getReadableDatabase();
     Cursor cursor = db.rawQuery("select * from " + DBConstant.T_Inspection_Entries + ";", null);
-    cursor.moveToFirst();
+
     if (cursor.getCount() <= 0) {
         return false;
     } else {
-        do {
-            String res = null;
-            SoapObject request = new SoapObject(NameSpace, SendEquipmentsEnntry);
-            PropertyInfo pi = new PropertyInfo();
+        cursor.moveToFirst();
+          do {
+              if((!(cursor.getString(cursor.getColumnIndex(DBConstant.C_Update1)) ==null) && !(cursor.getString(cursor.getColumnIndex(DBConstant.C_Update2)) ==null))) {
 
-            pi.setName("AndroidRowId");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ID)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  String res = null;
+                  SoapObject request = new SoapObject(NameSpace, SendEquipmentsEnntry);
+                  PropertyInfo pi = new PropertyInfo();
+
+                  pi.setName("AndroidRowId");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ID)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
 
-          pi = new PropertyInfo();
-            pi.setName("UserId");
-              pi.setValue("userid");
+                  pi = new PropertyInfo();
+                  pi.setName("UserId");
+                  pi.setValue("userid");
           /*  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.))); add username*/
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("DistrictId");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Dist_Code)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("DistrictId");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Dist_Code)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("InstituteTypeId");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Doc_Inst_TypeID)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("InstituteTypeId");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Doc_Inst_TypeID)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("InstituteId");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Doc_Inst_ID)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("InstituteId");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Doc_Inst_ID)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("EquipmentId");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_EquipmentId)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("EquipmentId");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_EquipmentId)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("EquipmentCategoryId");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_CategoryId)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("EquipmentCategoryId");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_CategoryId)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("ManufacturerNameId");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ManufacturerID)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("ManufacturerNameId");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ManufacturerID)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("SuplierNameId");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_SupplierId)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("SuplierNameId");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_SupplierId)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("ModelNameId");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ModelId)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("ModelNameId");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ModelId)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("SerialNumber");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_SerialNo)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("SerialNumber");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_SerialNo)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("InstallationDate");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_DateOfInstallment)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("InstallationDate");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_DateOfInstallment)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("InspectionDate");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_DateOfInspection)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("InspectionDate");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_DateOfInspection)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("AdnroidEntryDate");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_DateOfInspectionGPS)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("AdnroidEntryDate");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_DateOfInspectionGPS)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
 
-            pi = new PropertyInfo();
-            pi.setName("Location");
-            pi.setValue("Loc");
-        /*    pi.setValue(cursor.getString(cursor.getColumnIndex())); location*/
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("Location");
+                  pi.setValue("Loc");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Location)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("Remarks");
-            pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Remarks)));
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi = new PropertyInfo();
+                  pi.setName("Remarks");
+                  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Remarks)));
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
-            pi = new PropertyInfo();
-            pi.setName("CreatedBy");
-            pi.setValue("createdby");
+                  pi = new PropertyInfo();
+                  pi.setName("CreatedBy");
+                  pi.setValue("createdby");
             /*pi.setValue(cursor.getString(cursor.getColumnIndex())); username*/
-            pi.setType(String.class);
-            request.addProperty(pi);
+                  pi.setType(String.class);
+                  request.addProperty(pi);
 
 
-            SoapSerializationEnvelope envolpe = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-            envolpe.dotNet = true;
-            envolpe.setOutputSoapObject(request);
-            HttpTransportSE androidHTTP = new HttpTransportSE(URL);
+                  SoapSerializationEnvelope envolpe = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                  envolpe.dotNet = true;
+                  envolpe.setOutputSoapObject(request);
+                  HttpTransportSE androidHTTP = new HttpTransportSE(URL);
 
-            try {
-                androidHTTP.call(SoapLinkSendEquipmentsEnntry, envolpe);
-                SoapPrimitive response = (SoapPrimitive) envolpe.getResponse();
-                res = response.toString();
-                //System.out.println(res);
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        } while (cursor.moveToNext());
-
-
+                  try {
+                      androidHTTP.call(SoapLinkSendEquipmentsEnntry, envolpe);
+                      SoapPrimitive response = (SoapPrimitive) envolpe.getResponse();
+                      res = response.toString();
+                      //System.out.println(res);
+                      return true;
+                  } catch (Exception e) {
+                      e.printStackTrace();
+                      return false;
+                  }
+              }
+            } while (cursor.moveToNext());
+      return true;
     }
 }
     public ArrayList<District> getDistrict()
@@ -350,6 +341,16 @@ public Boolean SendEquipmentEntries(String id) {
         return list;
     }
 
+    public String getDataFrag1(String id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select * from "+DBConstant.T_Inspection_Entries+" where "+DBConstant.C_ID+" = '"+id+"';",null);
+        if(cr.getCount()<0)
+            return "false";
+        else
+            return getDistrictName(cr.getString(cr.getColumnIndex(DBConstant.C_Dist_Code)))+"#"+getInstTypeName(cr.getString(cr.getColumnIndex(DBConstant.C_Doc_Inst_TypeID)))+"#"+getInstName(cr.getString(cr.getColumnIndex(DBConstant.C_Doc_Inst_ID)));
+          /*  return cr.getString(cr.getColumnIndex(DBConstant.C_Di*/
+    }
     public ArrayList<InstituteType> getInstituteType()
     {
         SQLiteDatabase db=getReadableDatabase();
@@ -414,15 +415,10 @@ public Boolean SendEquipmentEntries(String id) {
     {
         SQLiteDatabase db=getWritableDatabase();
         long id=db.insert(DBConstant.T_Inspection_Entries,null,cv);
-        Id=id+"";
+
         db.close();
         return id;
 
-    }
-
-    public String getId()
-    {
-        return  Id;
     }
 
     public void UpdateFrag2(ContentValues cv,String idd)
@@ -443,9 +439,12 @@ public Boolean SendEquipmentEntries(String id) {
     {
         SQLiteDatabase db=getWritableDatabase();
         if(db.insert(DBConstant.TBL_Img_Data,null,cv)!=-1)
+        {
             return true;
-        else
+        }
+        else{
             return false;
+        }
     }
 
     public Bitmap getImage(int id, String UserID)
@@ -454,7 +453,7 @@ public Boolean SendEquipmentEntries(String id) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor result=null;
         try {
-            result=db.rawQuery("select * from " + DBConstant.TBL_Img_Data + " where " + DBConstant.C_Image_Id + "='" +id+ "' and "+DBConstant.C_ID+"='"+UserID+"';",null);
+            result=db.rawQuery("select "+DBConstant.C_Image+" from " + DBConstant.TBL_Img_Data + " where " + DBConstant.C_Image_Id + "='" +id+ "' and "+DBConstant.C_ID+"='"+UserID+"';",null);
         }
         catch (Exception e)
         {
@@ -468,7 +467,7 @@ public Boolean SendEquipmentEntries(String id) {
         result.moveToFirst();
 
         do {
-            byte[] arr= Base64.decode(result.getString(1), Base64.DEFAULT);
+            byte[] arr= Base64.decode(result.getString(result.getColumnIndex(DBConstant.C_Image)), Base64.DEFAULT);
             decodedByte = BitmapFactory.decodeByteArray(arr, 0, arr.length);
         } while (result.moveToNext());
         db.close();
@@ -479,7 +478,13 @@ public Boolean SendEquipmentEntries(String id) {
     {
         SQLiteDatabase db=getReadableDatabase();
         Cursor cr=db.rawQuery("select "+DBConstant.C_EquipmentName+" from "+DBConstant.T_Equipment+" where "+DBConstant.C_EquipmentId+"='"+EqipId+"'",null);
+       if(cr.getCount()>0)
         cr.moveToFirst();
+        else
+       {
+           db.close();
+           return "No Record";
+       }
         return cr.getString(0);
     }
 
@@ -491,6 +496,47 @@ public Boolean SendEquipmentEntries(String id) {
         return cr.getString(0);
 
     }
+    public String getDistrictName(String Id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select "+DBConstant.C_Dist_Name+" from "+DBConstant.T_District_Master+" where "+DBConstant.C_Dist_Code+"='"+Id+"'",null);
+        cr.moveToFirst();
+        return cr.getString(0);
+
+    }
+    public String getManufacturerName(String Id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select "+DBConstant.C_ManufacturerName+" from "+DBConstant.T_Manufacturer+" where "+DBConstant.C_ManufacturerID+"='"+Id+"'",null);
+        cr.moveToFirst();
+        return cr.getString(0);
+
+    }
+    public String getInstTypeName(String Id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select "+DBConstant.C_Doc_Inst_Type_Name+" from "+DBConstant.T_Doc_Inst_Type+" where "+DBConstant.C_Doc_Inst_TypeID+"='"+Id+"'",null);
+        cr.moveToFirst();
+        return cr.getString(0);
+
+    }
+    public String getSupplierName(String Id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select "+DBConstant.C_SupplierName+" from "+DBConstant.T_Supplier+" where "+DBConstant.C_SupplierId+"='"+Id+"'",null);
+        cr.moveToFirst();
+        return cr.getString(0);
+
+    }
+    public String getCategoryName(String Id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select "+DBConstant.C_CategoryName+" from "+DBConstant.T_Category+" where "+DBConstant.C_CategoryId+"='"+Id+"'",null);
+        cr.moveToFirst();
+        return cr.getString(0);
+
+    }
+
 
     public ArrayList<CardGetSet> getCardData()
     {
@@ -504,6 +550,9 @@ public Boolean SendEquipmentEntries(String id) {
               arr.add(new CardGetSet(cr.getString(cr.getColumnIndex(DBConstant.C_ID)),getInstName(cr.getString(cr.getColumnIndex(DBConstant.C_Doc_Inst_ID))),getEquipmentName(cr.getString(cr.getColumnIndex(DBConstant.C_EquipmentId)))));
             }while(cr.moveToNext());
 
+        }
+        else {
+            return arr;
         }
         db.close();
         return arr;

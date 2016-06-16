@@ -18,4 +18,16 @@
         android:layout_height="match_parent"
         android:id="@+id/rv"
         />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rlNoRecords"
+        android:visibility="invisible">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No Records Found"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 </LinearLayout>

@@ -4,10 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.equipments.Main;
+import com.equipments.InspectionList;
 import com.equipments.R;
 
 import java.io.File;
@@ -31,7 +30,7 @@ public class Splash extends AppCompatActivity {
             new getMaster_Tables().execute();
         else
         {
-            startActivity(new Intent(Splash.this,Main.class));
+            startActivity(new Intent(Splash.this,InspectionList.class));
             finish();
         }
 
@@ -63,7 +62,7 @@ public class Splash extends AppCompatActivity {
                 new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE).setTitleText("Unable to connect with Server!!!").show();
             }
             else {
-               startActivity(new Intent(Splash.this, Main.class));
+               startActivity(new Intent(Splash.this, InspectionList.class));
                 finish();
             }
             super.onPostExecute(s);

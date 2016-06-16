@@ -39,7 +39,8 @@
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spEquipment"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        app:hintText="Select Equipment Name"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -53,7 +54,8 @@
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spCategory"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        app:hintText="Select Equipment Category"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -67,7 +69,8 @@
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spManufacturer"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        app:hintText="Select Manufacturer Name"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -81,7 +84,8 @@
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/spSupplier"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        app:hintText="Select Supplier Name"/>
 
     <TextView
         android:layout_width="wrap_content"

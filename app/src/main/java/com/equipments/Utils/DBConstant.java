@@ -7,10 +7,9 @@ public class DBConstant {
 
     public static final String DBNameData="InspectionNoteEntry";
     public static final String DBNameMaster="Master";
-    public static final int DBVersion=1;
+    public static final int DBVersion=2;
 
     public static final String T_District_Master="TBLDistrictMaster";
-    public  static final String C_Dist_Scode="DScode";
     public  static final String C_Dist_Code="Dcode";
     public  static final String C_Dist_Name="Dname";
 
@@ -54,6 +53,9 @@ public class DBConstant {
     public static final String C_Remarks="Remarks";
     public static final String C_DateOfInspection="DateOfInspection";
     public static final String C_DateOfInspectionGPS="DateOfInspectionGPS";
+    public static final String C_Location="Location";
+    public static final String C_Update1="update1";
+    public static final String C_Update2="update2";
 
     public final static String TBL_Img_Data="Img";
     public final static String C_Image="Image";
@@ -105,9 +107,12 @@ public class DBConstant {
             +C_DateOfInstallment+" TEXT,"
             +C_DateOfInspection+" TEXT,"
             +C_DateOfInspectionGPS+" TEXT,"
-            +C_Remarks+ " TEXT);";
+            +C_Location+" TEXT,"
+            +C_Remarks+ " TEXT,"
+            +C_Update1+ " TEXT,"
+            +C_Update2+ " TEXT);";
 
-    public final static String Create_Table_Image="Create table "+ TBL_Img_Data+ "( "+C_ID+" INTEGER ,"
+    public final static String Create_Table_Image="Create table "+ TBL_Img_Data+ "( "+C_ID+" TEXT,"
             +C_Image+" TEXT,"
             +C_Image_Id+" TEXT,"
             +C_Image_Desc+" TEXT)";

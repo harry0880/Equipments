@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
+import com.equipments.GettersSetters.InpectionId;
 import com.equipments.GettersSetters.GetSet;
 import com.equipments.SpinnerAdapter.Category;
 import com.equipments.SpinnerAdapter.Equipment;
@@ -23,7 +23,7 @@ import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class DataInput4 extends Fragment {
-  SearchableSpinner spInstType,spDistrict,spEquipment,spCategory,spManufacturer,spSupplier,spInstitute;
+  SearchableSpinner spEquipment,spCategory,spManufacturer,spSupplier;
   ArrayAdapter<InstituteType> instituteTypeAdapter;
   Dbhandler db;
   GetSet getset;
@@ -35,7 +35,6 @@ public class DataInput4 extends Fragment {
     View view= inflater.inflate(R.layout.fragment_datainput4, container, false);
   db=new Dbhandler(getActivity());
     getset=new GetSet();
-/*  idd=container.getTag().toString();*/
     return view;
   }
 
@@ -45,8 +44,6 @@ public class DataInput4 extends Fragment {
 
     initialize(view);
 
- /* setInstType();
-    setDistrictSpinner();*/
     setCategory();
     setEquipment();
     setManufacturer();
@@ -56,25 +53,11 @@ public class DataInput4 extends Fragment {
       @Override
       public void onClick(View v) {
         savedata2();
+        ((Main)getActivity()).switchFragment();
       }
     });
 
-  /*  spDistrict.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position>=0)
-        {
-          District district=((District) spDistrict.getSelectedItem());
-          getset.setDcode_ds(district.getDcode_ds());
-          Districtselected = district.getDcode_ds();
-         *//* setInstitute();*//*
-        }
 
-      }
-      @Override
-      public void onNothingSelected(AdapterView<?> parent) {
-      }
-    });*/
     spCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -132,44 +115,10 @@ public class DataInput4 extends Fragment {
 
       }
     });
-   /* spInstitute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position>=0)
-        {
-          Institute institute = ((Institute)spInstitute.getSelectedItem());
-          getset.setInstid(institute.getInstitute_id());
-        }
-      }
 
-      @Override
-      public void onNothingSelected(AdapterView<?> parent) {
-
-      }
-    });
-    spInstType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-      @Override
-      public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position>=0) {
-          InstituteType intype = ((InstituteType) spInstType.getSelectedItem());
-          getset.setInstitutetype_id(intype.getInstitutetype_id());
-          Instituteypeselected=intype.getInstitutetype_id();
-        *//*  setInstitute();*//*
-        }
-      }
-
-      @Override
-      public void onNothingSelected(AdapterView<?> parent) {
-
-      }
-    });*/
-
-   /* TextView title = (TextView) view.findViewById(R.id.item_title);
-    title.setText(String.valueOf(position));*/
   }
   void initialize(View view)
   {
-        /*etInstName=(SearchableSpinner)findViewById(R.id.etInstituteName);*/
     btnproceed2=(FancyButton) view.findViewById(R.id.btnProceed2);
     spCategory=(SearchableSpinner) view.findViewById(R.id.spCategory);
     spSupplier=(SearchableSpinner) view.findViewById(R.id.spSupplier);
@@ -178,21 +127,6 @@ public class DataInput4 extends Fragment {
 
   }
 
- /* void setInstType()
-  {
-    instituteTypeAdapter=new ArrayAdapter<InstituteType>(getActivity(),android.R.layout.simple_spinner_item,db.getInstituteType());
-    instituteTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    spInstType.setAdapter(instituteTypeAdapter);
-    spInstType.setTitle("Institute Type");
-  }
-
-  void setDistrictSpinner()
-  {
-    ArrayAdapter<District> Adapter = new ArrayAdapter<District>(getActivity(), android.R.layout.simple_spinner_item, db.getDistrict());
-    Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    spDistrict.setAdapter(Adapter);
-    spDistrict.setTitle("District");
-  }*/
 
   void setEquipment()
   {
@@ -218,14 +152,7 @@ public class DataInput4 extends Fragment {
     spSupplier.setTitle("Supplier");
   }
 
-/*
- void setInstitute()
-  {
-    ArrayAdapter<Institute> Adapter = new ArrayAdapter<Institute>(getActivity(), android.R.layout.simple_spinner_item, db.getInstitute(Districtselected,Instituteypeselected));
-    Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    spInstitute.setAdapter(Adapter);
-  }
-*/
+
 
   void setCategory()
   {
@@ -242,7 +169,8 @@ public class DataInput4 extends Fragment {
     cv.put(DBConstant.C_CategoryId,getset.getEquipmentcategory_id());
     cv.put(DBConstant.C_ManufacturerID,getset.getEquipmentManufacturer_id());
     cv.put(DBConstant.C_SupplierId,getset.getEquipmentSupplier_id());
-    db.UpdateFrag2(cv,db.getId());
+    cv.put(DBConstant.C_Update1,"1");
+    db.UpdateFrag2(cv,InpectionId.getId());
 
 
   }

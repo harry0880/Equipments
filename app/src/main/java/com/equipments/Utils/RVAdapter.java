@@ -17,6 +17,7 @@ import java.util.List;
  */
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
 List<CardGetSet> data;
+    static OnItemClickListener listener;
 
     public RVAdapter(List<CardGetSet> data) {
         this.data = data;
@@ -25,8 +26,8 @@ List<CardGetSet> data;
     @Override
     public PersonViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.listview, parent, false);
-        PersonViewHolder pvh = new PersonViewHolder(v);
-        return pvh;
+        return    new PersonViewHolder(v);
+
     }
 
     @Override
@@ -46,19 +47,41 @@ List<CardGetSet> data;
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public static class PersonViewHolder extends RecyclerView.ViewHolder {
+    public  class PersonViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView cv;
         TextView EQuipment;
         TextView Institute;
         TextView Id;
 
+
         PersonViewHolder(View itemView) {
             super(itemView);
-            cv = (CardView)itemView.findViewById(R.id.cv);
-            Institute = (TextView)itemView.findViewById(R.id.tvInstitute);
-            EQuipment = (TextView)itemView.findViewById(R.id.tvEquipment);
-            Id=(TextView) itemView.findViewById(R.id.tvId);
+            cv = (CardView) itemView.findViewById(R.id.cv);
+            Institute = (TextView) itemView.findViewById(R.id.tvInstitute);
+            EQuipment = (TextView) itemView.findViewById(R.id.tvEquipment);
+            Id = (TextView) itemView.findViewById(R.id.tvId);
+            itemView.setOnClickListener(this);
         }
+
+
+        @Override
+        public void onClick(View v) {
+            if (listener!=null)
+                listener.onItemClick(Id.getText().toString());
+        }
+
+
+    }
+
+
+
+        public interface OnItemClickListener{
+            public void onItemClick(String Id);
+        }
+
+
+    public void setOnItemClickListener(final OnItemClickListener listener){
+        this.listener = listener;
     }
 
 }

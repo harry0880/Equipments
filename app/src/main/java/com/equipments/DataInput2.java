@@ -2,10 +2,13 @@ package com.equipments;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -14,27 +17,31 @@ import android.widget.ImageButton;
 
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.equipments.GettersSetters.Barcode;
+import com.equipments.GettersSetters.InpectionId;
 import com.equipments.Utils.DBConstant;
 import com.equipments.Utils.Dbhandler;
 import com.equipments.Utils.SimpleScannerFragmentActivity;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
-public class DataInput2 extends Fragment {
+public class DataInput2 extends Fragment implements DatePickerDialog.OnDateChangedListener, DatePickerDialog.OnDateSetListener {
     ArrayList<String> teamMember;
     ArrayAdapter<String> dataAdapter;
     SwipeMenuListView listview;
     ViewGroup.LayoutParams lvp;
     EditText etSerialno,etDOI,etDOInspec,etRemarks;
     SearchableSpinner spInstType;
-    FancyButton btnAdd,btnUpdate,btnCancel,btnDelete;
+    FancyButton btnAdd,btnUpdate,btnCancel,btnDelete,btnSave;
     ImageButton barcode;
     Barcode barcodee;
     String idd;
     Dbhandler db;
+    static int DateviewSelected=0;
     static int cnt=0;
     ContentValues[] contentValues;
     private final String[] array = {"Hello"};
@@ -76,6 +83,69 @@ public class DataInput2 extends Fragment {
             }
         });
 
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SaveData();
+            }
+        });
+
+        etDOI.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(MotionEvent.ACTION_UP == event.getAction()) {
+                   DateviewSelected=0;
+                    Calendar now = Calendar.getInstance();
+                    DatePickerDialog dpd = DatePickerDialog.newInstance(
+                         DataInput2.this,
+                            now.get(Calendar.YEAR),
+                            now.get(Calendar.MONTH),
+                            now.get(Calendar.DAY_OF_MONTH)
+                    );
+                    dpd.setThemeDark(true);
+                    dpd.setAccentColor(Color.parseColor("#3F51B5"));
+                    dpd.setMinDate(now);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        dpd.setAllowEnterTransitionOverlap(true);
+                        dpd.setAllowReturnTransitionOverlap(true);
+                    }
+                    // dpd.dismissOnPause(dismissDate.isChecked());
+                    dpd.showYearPickerFirst(true);
+                    dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
+
+                }
+
+                return true;
+            }
+        });
+
+        etDOInspec.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(MotionEvent.ACTION_UP == event.getAction()) {
+                    Calendar now = Calendar.getInstance();
+                    DateviewSelected=1;
+                    DatePickerDialog dpd = DatePickerDialog.newInstance(
+                            DataInput2.this,
+                            now.get(Calendar.YEAR),
+                            now.get(Calendar.MONTH),
+                            now.get(Calendar.DAY_OF_MONTH)
+                    );
+                    dpd.setThemeDark(true);
+                    dpd.setAccentColor(Color.parseColor("#3F51B5"));
+                    dpd.setMinDate(now);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        dpd.setAllowEnterTransitionOverlap(true);
+                        dpd.setAllowReturnTransitionOverlap(true);
+                    }
+                    // dpd.dismissOnPause(dismissDate.isChecked());
+                    dpd.showYearPickerFirst(true);
+                    dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
+
+                }
+                return true;
+            }
+        });
 
 
     }
@@ -88,6 +158,8 @@ public class DataInput2 extends Fragment {
         btnUpdate=(FancyButton) view.findViewById(R.id.btnUpdate);
         btnDelete=(FancyButton) view.findViewById(R.id.btndelete);
         etSerialno=(EditText)view.findViewById(R.id.etSerialNumber);
+        btnSave=(FancyButton) view.findViewById(R.id.btnSave);
+        etRemarks=(EditText) view.findViewById(R.id.Remarks);
         etDOI=(EditText)view.findViewById(R.id.DateOfInstallment);
         etDOInspec=(EditText)view.findViewById(R.id.DateOfInspection);
         barcode=(ImageButton) view.findViewById(R.id.barcode);
@@ -100,7 +172,9 @@ public class DataInput2 extends Fragment {
         cv.put(DBConstant.C_SerialNo,etSerialno.getText().toString());
         cv.put(DBConstant.C_DateOfInstallment,etDOI.getText().toString());
         cv.put(DBConstant.C_DateOfInspection,etDOInspec.getText().toString());
-        db.savefrag3(cv,db.getId());
+        cv.put(DBConstant.C_Remarks,etRemarks.getText().toString());
+        cv.put(DBConstant.C_Update2,"1");
+        db.savefrag3(cv,InpectionId.getId());
     }
 
 
@@ -108,5 +182,20 @@ public class DataInput2 extends Fragment {
     public void onResume() {
         etSerialno.setText(barcodee.getBarcodee());
         super.onResume();
+    }
+
+    @Override
+    public void onDateChanged() {
+
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String date = year+"-"+(++monthOfYear)+"-"+ dayOfMonth;
+       if(DateviewSelected==0)
+        etDOI.setText(date);
+        if(DateviewSelected==1)
+            etDOInspec.setText(date);
+
     }
 }
