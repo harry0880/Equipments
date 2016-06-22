@@ -1,6 +1,7 @@
 package com.equipments;
 
 import android.content.ContentValues;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -52,8 +53,11 @@ public class DataInput4 extends Fragment {
     btnproceed2.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        savedata2();
-        ((Main)getActivity()).switchFragment();
+        if(!InpectionId.getId().equals("-1")) {
+          savedata2();
+          ((Main) getActivity()).switchFragment();
+          btnproceed2.setBackgroundColor(Color.parseColor("#FF63727B"));
+        }
       }
     });
 
@@ -170,6 +174,7 @@ public class DataInput4 extends Fragment {
     cv.put(DBConstant.C_ManufacturerID,getset.getEquipmentManufacturer_id());
     cv.put(DBConstant.C_SupplierId,getset.getEquipmentSupplier_id());
     cv.put(DBConstant.C_Update1,"1");
+
     db.UpdateFrag2(cv,InpectionId.getId());
 
 

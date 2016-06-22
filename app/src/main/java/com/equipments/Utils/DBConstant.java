@@ -42,6 +42,7 @@ public class DBConstant {
     public  static final String C_SupplierName="SupplierName";
 
     public  static final String T_TeamMembers="TBLTeamMembers";
+    public  static final String C_TeamMemberId="TeamMemberID";
     public  static final String C_TeamMemberName="TeamMemberName";
     public  static final String C_TeamMemberDesignation="TeamMemberDesignation";
 
@@ -91,6 +92,7 @@ public class DBConstant {
             + C_SupplierName+ " TEXT);";
 
     public static final String CREATE_TABLE_Team_Memebers= "CREATE TABLE "+ T_TeamMembers + "(" + C_ID + " TEXT,"
+            +C_TeamMemberId+" TEXT,"
             +C_TeamMemberName+" TEXT,"
             + C_TeamMemberDesignation+ " TEXT);";
 

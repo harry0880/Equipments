@@ -38,8 +38,8 @@ public class Dbhandler extends SQLiteOpenHelper {
 
 
     final String NameSpace="http://tempuri.org/";
-    String URL="http://10.88.229.42:90/Service.asmx";
-
+   /* String URL="http://10.88.229.42:90/Service.asmx";*/
+    String URL="http://demo.dpmuhry.gov.in/Service.asmx";
     String LoadMasterMathod = "master";
     String SoapLinkMaster="http://tempuri.org/master";
 
@@ -66,6 +66,7 @@ public class Dbhandler extends SQLiteOpenHelper {
         db.execSQL(DBConstant.CREATE_TABLE_Model_Master);
         db.execSQL(DBConstant.CREATE_TABLE_Supplier_Master);
         db.execSQL(DBConstant.Create_Table_Image);
+        db.execSQL(DBConstant.CREATE_TABLE_Team_Memebers);
         
     }
 
@@ -317,6 +318,24 @@ public Boolean SendEquipmentEntries() {
       return true;
     }
 }
+
+    public Boolean delete_Table_members(String id)
+    {
+        String rawquery="delete from "+DBConstant.T_TeamMembers+" where "+DBConstant.C_ID + "='"+id+"';";
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(rawquery);
+        db.close();
+        return true;
+    }
+
+
+    public void insert_Team_Members(ContentValues cv)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        db.insert(DBConstant.T_TeamMembers,null,cv);
+        db.close();
+    }
+
     public ArrayList<District> getDistrict()
     {
         SQLiteDatabase db=getReadableDatabase();
@@ -423,16 +442,29 @@ public Boolean SendEquipmentEntries() {
 
     public void UpdateFrag2(ContentValues cv,String idd)
     {
-        SQLiteDatabase db=getWritableDatabase();
-        db.update(DBConstant.T_Inspection_Entries,cv,DBConstant.C_ID+"='"+idd+"'",null);
-        db.close();
+        if(idd.equals("-1"))
+        {
+            //SnackBar
+        }
+        else {
+            SQLiteDatabase db = getWritableDatabase();
+            db.update(DBConstant.T_Inspection_Entries, cv, DBConstant.C_ID + "='" + idd + "'", null);
+            db.close();
+        }
     }
 
     public void savefrag3(ContentValues cv,String idd)
     {
-        SQLiteDatabase db=getWritableDatabase();
-        db.update(DBConstant.T_Inspection_Entries,cv,DBConstant.C_ID+"='"+idd+"'",null);
-        db.close();
+        if(idd.equals("-1"))
+        {
+            //SnackBar
+        }
+        else {
+            SQLiteDatabase db=getWritableDatabase();
+            db.update(DBConstant.T_Inspection_Entries,cv,DBConstant.C_ID+"='"+idd+"'",null);
+            db.close();
+        }
+
     }
 
     public Boolean saveimg(ContentValues cv)

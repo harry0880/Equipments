@@ -6,16 +6,19 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 
-import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.equipments.GettersSetters.Barcode;
 import com.equipments.GettersSetters.InpectionId;
 import com.equipments.Utils.DBConstant;
@@ -30,19 +33,21 @@ import java.util.Calendar;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class DataInput2 extends Fragment implements DatePickerDialog.OnDateChangedListener, DatePickerDialog.OnDateSetListener {
-    ArrayList<String> teamMember;
+    ArrayList<String> teamMember,teamMemberDesig,teamMemberName;
     ArrayAdapter<String> dataAdapter;
-    SwipeMenuListView listview;
+    ListView listview;
+    int ItemPosition;
     ViewGroup.LayoutParams lvp;
-    EditText etSerialno,etDOI,etDOInspec,etRemarks;
+    EditText etSerialno,etDOI,etDOInspec,etRemarks,etNameTM,etDesigTM;
     SearchableSpinner spInstType;
-    FancyButton btnAdd,btnUpdate,btnCancel,btnDelete,btnSave;
+    FancyButton btnAdd,btnUpdate,btnCancel,btnDelete,btnSave,btnSaveList;
     ImageButton barcode;
     Barcode barcodee;
     String idd;
     Dbhandler db;
     static int DateviewSelected=0;
     static int cnt=0;
+    LinearLayout llAddMemebers;
     ContentValues[] contentValues;
     private final String[] array = {"Hello"};
     @Override
@@ -60,7 +65,10 @@ public class DataInput2 extends Fragment implements DatePickerDialog.OnDateChang
         super.onViewCreated(view, savedInstanceState);
 
         initialize(view);
+        ButtonDisable();
         teamMember=new ArrayList<String>();
+        teamMemberDesig=new ArrayList<String>();
+        teamMemberName=new ArrayList<String>();
         dataAdapter=new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, teamMember);
         listview.setAdapter(dataAdapter);
@@ -75,11 +83,71 @@ public class DataInput2 extends Fragment implements DatePickerDialog.OnDateChang
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                lvp.height = listview.getHeight() + 100;
-                teamMember.add("Hello");
-                listview.requestLayout();
-                dataAdapter.notifyDataSetChanged();
+                if(etNameTM.getText().toString().trim().equals("")
+                        ||etDesigTM.getText().toString().equals(""))
+                {
+                    Snackbar.make(v,"Please fill all fields!!!",Snackbar.LENGTH_SHORT);
+                }
+                else
+                {
+                    lvp.height = listview.getHeight() + 100;
+                    teamMember.add(etNameTM.getText().toString()+"("+etDesigTM.getText().toString()+")");
+                    teamMemberName.add(etNameTM.getText().toString());
+                    teamMemberDesig.add(etDesigTM.getText().toString());
+                    listview.requestLayout();
+                    dataAdapter.notifyDataSetChanged();
+                    clearAll();
+                }
+            }
+        });
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            clearAll();
+                ButtonDisable();
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                teamMember.remove(ItemPosition);
+                teamMemberName.remove(ItemPosition);
+                teamMemberDesig.remove(ItemPosition);
+                dataAdapter.notifyDataSetChanged();
+                lvp.height = listview.getHeight() - 100;
+                clearAll();
+                ButtonDisable();
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                teamMember.remove(ItemPosition);
+                teamMemberDesig.remove(ItemPosition);
+                teamMemberName.remove(ItemPosition);
+
+                teamMember.add(etNameTM.getText().toString()+"("+etDesigTM.getText().toString()+")");
+                teamMemberDesig.add(etDesigTM.getText().toString());
+                teamMemberName.add(etNameTM.getText().toString());
+
+                dataAdapter.notifyDataSetChanged();
+                ButtonDisable();
+                clearAll();
+            }
+        });
+
+
+
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ItemPosition=position;
+                etNameTM.setText(teamMemberName.get(position));
+                etDesigTM.setText(teamMemberDesig.get(position));
+                ButtonEnable();
             }
         });
 
@@ -87,6 +155,9 @@ public class DataInput2 extends Fragment implements DatePickerDialog.OnDateChang
             @Override
             public void onClick(View v) {
                 SaveData();
+
+                btnSave.setEnabled(false);
+                llAddMemebers.setVisibility(View.VISIBLE);
             }
         });
 
@@ -112,7 +183,6 @@ public class DataInput2 extends Fragment implements DatePickerDialog.OnDateChang
                     // dpd.dismissOnPause(dismissDate.isChecked());
                     dpd.showYearPickerFirst(true);
                     dpd.show(getActivity().getFragmentManager(), "Datepickerdialog");
-
                 }
 
                 return true;
@@ -147,11 +217,73 @@ public class DataInput2 extends Fragment implements DatePickerDialog.OnDateChang
             }
         });
 
-
+btnSaveList.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        db.delete_Table_members(InpectionId.getId());
+        int index=0;
+        for(String i:teamMember)
+        {
+            ContentValues cv=new ContentValues();
+            cv.put(DBConstant.C_ID,InpectionId.getId());
+            cv.put(DBConstant.C_TeamMemberId,index+1);
+            cv.put(DBConstant.C_TeamMemberName,teamMember.get(index));
+            cv.put(DBConstant.C_TeamMemberDesignation,teamMemberDesig.get(index));
+            index++;
+            db.insert_Team_Members(cv);
+        }
+        allButtonDisable();
     }
+});
+    }
+
+    void clearAll()
+    {
+        etNameTM.setText("");
+        etDesigTM.setText("");
+    }
+
+    void ButtonDisable()
+    {
+        btnAdd.setEnabled(true);
+        btnCancel.setEnabled(false);
+        btnUpdate.setEnabled(false);
+        btnDelete.setEnabled(false);
+        btnAdd.setBackgroundColor(Color.parseColor("#303F9F"));
+        btnCancel.setBackgroundColor(Color.parseColor("#FF63727B"));
+        btnUpdate.setBackgroundColor(Color.parseColor("#FF63727B"));
+        btnDelete.setBackgroundColor(Color.parseColor("#FF63727B"));
+    }
+
+    void ButtonEnable()
+    {
+        btnAdd.setEnabled(false);
+        btnDelete.setEnabled(true);
+        btnCancel.setEnabled(true);
+        btnUpdate.setEnabled(true);
+        btnAdd.setBackgroundColor(Color.parseColor("#FF63727B"));
+        btnCancel.setBackgroundColor(Color.parseColor("#303F9F"));
+        btnUpdate.setBackgroundColor(Color.parseColor("#303F9F"));
+        btnDelete.setBackgroundColor(Color.parseColor("#303F9F"));
+    }
+
+    void allButtonDisable()
+    {
+        btnAdd.setEnabled(false);
+        btnDelete.setEnabled(false);
+        btnCancel.setEnabled(false);
+        btnUpdate.setEnabled(false);
+        btnSaveList.setEnabled(false);
+        btnAdd.setBackgroundColor(Color.parseColor("#FF63727B"));
+        btnCancel.setBackgroundColor(Color.parseColor("#FF63727B"));
+        btnUpdate.setBackgroundColor(Color.parseColor("#FF63727B"));
+        btnDelete.setBackgroundColor(Color.parseColor("#FF63727B"));
+        btnSaveList.setBackgroundColor(Color.parseColor("#FF63727B"));
+    }
+
     void initialize(View view)
     {
-        listview=(SwipeMenuListView) view.findViewById(R.id.listView);
+        listview=(ListView) view.findViewById(R.id.listView);
         lvp=(ViewGroup.LayoutParams)listview.getLayoutParams();
         btnAdd=(FancyButton) view.findViewById(R.id.btnAddtoList);
         btnCancel=(FancyButton) view.findViewById(R.id.btnCancel);
@@ -164,6 +296,10 @@ public class DataInput2 extends Fragment implements DatePickerDialog.OnDateChang
         etDOInspec=(EditText)view.findViewById(R.id.DateOfInspection);
         barcode=(ImageButton) view.findViewById(R.id.barcode);
         barcodee=new Barcode();
+        etNameTM=(EditText) view.findViewById(R.id.etNameTM);
+        etDesigTM=(EditText) view.findViewById(R.id.etDesinationTM);
+        llAddMemebers=(LinearLayout) view.findViewById(R.id.llAddMemebers);
+        btnSaveList=(FancyButton) view.findViewById(R.id.btnSaveList);
     }
 
     void SaveData()

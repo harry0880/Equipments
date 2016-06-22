@@ -1,6 +1,7 @@
 package com.equipments;
 
 import android.content.ContentValues;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -62,6 +63,7 @@ public class DataInput1 extends Fragment {
          else {
            ((Main) getActivity()).switchFragment();
            btnSubmit.setEnabled(false);
+           btnSubmit.setBackgroundColor(Color.parseColor("#FF63727B"));
           /* btnSubmit.setBackgroundColor(R.color.icon_disabled);*/
          }
        }
@@ -90,7 +92,6 @@ public class DataInput1 extends Fragment {
           Districtselected = district.getDcode_ds();
           setInstitute();
         }
-
       }
       @Override
       public void onNothingSelected(AdapterView<?> parent) {

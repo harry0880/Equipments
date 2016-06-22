@@ -42,6 +42,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
@@ -104,6 +105,11 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 if(processedBitmap!=null)
+                    if(Id.equals("-1"))
+                    {
+                        Snackbar.make(v,"Please Save previous data first",Snackbar.LENGTH_SHORT).show();
+                    }
+                else
                 new Save_Photo_Async_Task().execute();
             }
         });
@@ -136,36 +142,20 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         setPhotoFrame();
-        processedBitmap=compressImage();
+        try {
+            processedBitmap = compressImage();
+        } catch (Exception e) {
+            e.printStackTrace();
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE).setTitleText("Click Failure").setContentText("No Photo Clicked. Attendance cannot be marked.")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                            sweetAlertDialog.dismissWithAnimation();
+                        }
+                    }).show();
 
-    }
 
-    private Bitmap handleSmallCameraPhoto() {
-        int targetW = img.getWidth();
-        int targetH = img.getHeight();
-        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        int photoW = bmOptions.outWidth;
-        int photoH = bmOptions.outHeight;
-        int scaleFactor = 1;
-        if ((targetW > 0) || (targetH > 0)) {
-            scaleFactor = Math.min(photoW/targetW, photoH/targetH);
         }
-
-		/* Set bitmap options to scale the image decode target */
-        bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
-        bmOptions.inPurgeable = true;
-
-		/* Decode the JPEG file into a Bitmap */
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-        if(bitmap!=null) {
-            img.setImageBitmap(bitmap);
-            img.setVisibility(View.VISIBLE);
-        }
-        return bitmap;
     }
 
     private File setUpPhotoFile() throws IOException {

@@ -2,13 +2,11 @@ package com.equipments;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -19,14 +17,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.equipments.GettersSetters.GetSet;
 import com.equipments.GettersSetters.InpectionId;
 import com.equipments.GettersSetters.Time;
 import com.equipments.Utils.AndroidDatabaseManager;
@@ -45,7 +39,6 @@ import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -54,7 +47,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * Created by Administrator on 09/06/2016.
  */
 public class Main extends AppCompatActivity  implements
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener,LocationSource {
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,LocationListener,LocationSource,ActivityCompat.OnRequestPermissionsResultCallback {
     SearchableSpinner spInstType;
     ArrayAdapter<String> instituteTypeAdapter;
     Context context;
@@ -75,11 +68,12 @@ public class Main extends AppCompatActivity  implements
     private static int DISPLACEMENT = 10; // 10 meters
     private static final int REQUEST_Permission = 0;
     ViewPager viewPager;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activityviewpager);
-        context=this;
+        context = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Equipments");
@@ -89,7 +83,7 @@ public class Main extends AppCompatActivity  implements
         ViewGroup tab = (ViewGroup) findViewById(R.id.tab);
         tab.addView(LayoutInflater.from(this).inflate(R.layout.tabs, tab, false));
 
-      viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 
         FragmentPagerItems pages = new FragmentPagerItems(this);
@@ -107,7 +101,7 @@ public class Main extends AppCompatActivity  implements
         viewPagerTab.setViewPager(viewPager);
 
         if (getGPSStatus()) {
-            if(isMockSettingsON(context)) {
+            if (isMockSettingsON(context)) {
                 final SweetAlertDialog dialog = new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE).setTitleText("Mock Locations!!!");
                 dialog.setContentText("Please disable mock location first!!");
                 dialog.show();
@@ -121,13 +115,12 @@ public class Main extends AppCompatActivity  implements
                         }
                     }
                 });
-            }
-            else if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+            } else if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_Permission
                 );
             } else {
-            initialize_Location();
+                initialize_Location();
             }
         } else {
             {
@@ -147,18 +140,17 @@ public class Main extends AppCompatActivity  implements
             }
         }
     }
-void initialize_Location()
-{
-    if (checkPlayServices()) {
-        // Building the GoogleApi client
-        buildGoogleApiClient();
-        mGoogleApiClient.connect();
-    }
-}
 
-    private Boolean getGPSStatus()
-    {
-        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE );
+    void initialize_Location() {
+        if (checkPlayServices()) {
+            // Building the GoogleApi client
+            buildGoogleApiClient();
+            mGoogleApiClient.connect();
+        }
+    }
+
+    private Boolean getGPSStatus() {
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         return statusOfGPS;
     }
@@ -228,20 +220,30 @@ void initialize_Location()
     }
 
     private void setLocation() {
-
-        mLastLocation = LocationServices.FusedLocationApi
-                .getLastLocation(mGoogleApiClient);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+           // getLocationPermission();
+        } else {
+            mLastLocation = LocationServices.FusedLocationApi
+                    .getLastLocation(mGoogleApiClient);
+        }
 
         if (mLastLocation != null) {
 
             double latitude = mLastLocation.getLatitude();
             double longitude = mLastLocation.getLongitude();
-            com.equipments.GettersSetters.Location.setLocation(latitude+" "+longitude);
-          /*  Toast.makeText(context,latitude+" "+longitude,Toast.LENGTH_SHORT).show();*/
+            com.equipments.GettersSetters.Location.setLocation(latitude + " " + longitude);
+            Toast.makeText(context, latitude + " " + longitude, Toast.LENGTH_SHORT).show();
             Time.setTime(get_Time());
         }
     }
 
+    void getLocationPermission()
+    {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+        }
+    }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
