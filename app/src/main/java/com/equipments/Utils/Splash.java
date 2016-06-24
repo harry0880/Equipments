@@ -33,7 +33,6 @@ public class Splash extends AppCompatActivity {
             startActivity(new Intent(Splash.this,InspectionList.class));
             finish();
         }
-
     }
 
     private static boolean doesDatabaseExist(Context context, String dbName) {

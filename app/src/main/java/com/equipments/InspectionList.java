@@ -43,8 +43,8 @@ public class InspectionList extends AppCompatActivity {
         rv.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String Id) {
-                /*InpectionId.setId(Id);*/
-              /*  startActivity(new Intent(InspectionList.this,Main.class));*/
+              /* Inspec.setId(Id);
+                startActivity(new Intent(InspectionList.this,Main.class));*/
             }
         });
 
