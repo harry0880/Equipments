@@ -37,7 +37,7 @@ public class InspectionList extends AppCompatActivity {
         setSupportActionBar(toolbar);
         dbh = new Dbhandler(this);
         InitializeAdapter();
-        InpectionId.setNewentry(0);
+        InpectionId.setNewentry(false);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         lvItems.setLayoutManager(llm);
@@ -46,10 +46,9 @@ public class InspectionList extends AppCompatActivity {
         rv.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String Id) {
-                InpectionId.setNewentry(0);
+                InpectionId.setNewentry(true);
                 InpectionId.setId(Id);
-                startActivity(new Intent(InspectionList.this,Main.class));
-
+              startActivity(new Intent(InspectionList.this,Main.class));
             }
         });
 

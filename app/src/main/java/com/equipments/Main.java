@@ -281,6 +281,7 @@ public class Main extends AppCompatActivity  implements
     @Override
     public void onBackPressed() {
         startActivity(new Intent(Main.this, AndroidDatabaseManager.class));
+        finish();
         InpectionId.setId("-1");
         super.onBackPressed();
     }

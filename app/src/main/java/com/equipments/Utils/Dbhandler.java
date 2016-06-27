@@ -441,6 +441,15 @@ public Boolean SendEquipmentEntries() {
 
     }
 
+    public void UpdateFrag1(ContentValues cv,String id)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        db.update(DBConstant.T_Inspection_Entries,cv,DBConstant.C_ID+"='"+id+"'",null);
+
+        db.close();
+
+    }
+
     public void UpdateFrag2(ContentValues cv,String idd)
     {
         if(idd.equals("-1"))
@@ -635,11 +644,64 @@ public Boolean SendEquipmentEntries() {
     public  String getDataInput1(String id)
     {
         SQLiteDatabase db=getReadableDatabase();
-        Cursor cr= db.rawQuery("select "+DBConstant.C_Dist_Code+","+DBConstant.C_Doc_Inst_TypeID+","+DBConstant.C_Doc_Inst_ID+" from "+DBConstant.T_Inspection_Entries+" where"+DBConstant.C_ID+"='"+id+"';",null);
+        Cursor cr= db.rawQuery("select "+DBConstant.C_Dist_Code+","+DBConstant.C_Doc_Inst_TypeID+","+DBConstant.C_Doc_Inst_ID+" from "+DBConstant.T_Inspection_Entries+" where "+DBConstant.C_ID+"='"+id+"';",null);
         cr.moveToFirst();
         String result=cr.getString(cr.getColumnIndex(DBConstant.C_Dist_Code))+"#"+cr.getString(cr.getColumnIndex(DBConstant.C_Doc_Inst_TypeID))+"#"+cr.getString(cr.getColumnIndex(DBConstant.C_Doc_Inst_ID));
         db.close();
         return result;
+    }
+
+    public  String getDataInput2(String id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr= db.rawQuery("select "+DBConstant.C_EquipmentId+","+DBConstant.C_CategoryId+","+DBConstant.C_ManufacturerID+","+DBConstant.C_SupplierId+" from "+DBConstant.T_Inspection_Entries+" where "+DBConstant.C_ID+"='"+id+"';",null);
+        if(cr.getCount()<=0)
+        {
+            db.close();
+            return null;
+        }
+        cr.moveToFirst();
+        String result=cr.getString(cr.getColumnIndex(DBConstant.C_EquipmentId))+"#"+cr.getString(cr.getColumnIndex(DBConstant.C_CategoryId))+"#"+cr.getString(cr.getColumnIndex(DBConstant.C_ManufacturerID))+"#"+cr.getString(cr.getColumnIndex(DBConstant.C_SupplierId));
+        db.close();
+        return result;
+    }
+
+    public  String getDataInput3(String id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr= db.rawQuery("select "+DBConstant.C_SerialNo+","+DBConstant.C_DateOfInstallment+","+DBConstant.C_DateOfInspection+","+DBConstant.C_Remarks+" from "+DBConstant.T_Inspection_Entries+" where "+DBConstant.C_ID+"='"+id+"';",null);
+        if(cr.getCount()<=0)
+        {
+            db.close();
+            return null;
+        }
+        cr.moveToFirst();
+        String result=cr.getString(cr.getColumnIndex(DBConstant.C_SerialNo))+"#"+cr.getString(cr.getColumnIndex(DBConstant.C_DateOfInstallment))+"#"+cr.getString(cr.getColumnIndex(DBConstant.C_DateOfInspection))+"#"+cr.getString(cr.getColumnIndex(DBConstant.C_Remarks));
+        db.close();
+        return result;
+    }
+
+    public  ArrayList<String>[] getDataInput4(String id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr= db.rawQuery("select "+DBConstant.C_TeamMemberName+","+DBConstant.C_TeamMemberDesignation+" from "+DBConstant.T_TeamMembers+" where "+DBConstant.C_ID+"='"+id+"';",null);
+        if(cr.getCount()<=0)
+        {
+            db.close();
+            return null;
+        }
+        ArrayList<String> teamMemberName=new ArrayList<>();
+        ArrayList<String> teamMemberDesig=new ArrayList<>();
+        ArrayList<String>[] arr=null;
+        cr.moveToFirst();
+       do {
+           teamMemberName.add(cr.getString(cr.getColumnIndex(DBConstant.C_TeamMemberName)));
+           teamMemberDesig.add(cr.getString(cr.getColumnIndex(DBConstant.C_TeamMemberDesignation)));
+       }while (cr.moveToNext());
+        arr[0]=teamMemberName;
+        arr[1]=teamMemberDesig;
+        db.close();
+        return arr ;
     }
 
 

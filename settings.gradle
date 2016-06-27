@@ -1,2 +1,2 @@
-include ':app'/*,':searchablespinnerlibrary'*/
+include ':app',':searchablespinnerlibrary'
 

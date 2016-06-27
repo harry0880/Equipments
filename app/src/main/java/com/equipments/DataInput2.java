@@ -43,7 +43,7 @@ public class DataInput2 extends Fragment implements DatePickerDialog.OnDateChang
     FancyButton btnAdd,btnUpdate,btnCancel,btnDelete,btnSave,btnSaveList;
     ImageButton barcode;
     Barcode barcodee;
-    String idd;
+    String[] savedEntry;
     Dbhandler db;
     static int DateviewSelected=0;
     static int cnt=0;
@@ -65,18 +65,41 @@ public class DataInput2 extends Fragment implements DatePickerDialog.OnDateChang
         super.onViewCreated(view, savedInstanceState);
 
         initialize(view);
-        ButtonDisable();
-        teamMember=new ArrayList<String>();
-        teamMemberDesig=new ArrayList<String>();
-        teamMemberName=new ArrayList<String>();
         dataAdapter=new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, teamMember);
         listview.setAdapter(dataAdapter);
+        ButtonDisable();
+        savedEntry = db.getDataInput3(InpectionId.getId()).split("#");
+        if(InpectionId.getNewentry() && savedEntry!=null) {
+           barcodee.setBarcodee(savedEntry[0]);
+            etDOI.setText(savedEntry[1]);
+            etDOInspec.setText(savedEntry[2]);
+            etRemarks.setText(savedEntry[3]);
+            ArrayList<String>[] Al=db.getDataInput4(InpectionId.getId());
+            if(Al!=null)
+            {
+                for(String name:Al[0])
+                {
+                    teamMember.add(name);
+                    teamMemberName.add(name);
+                    lvp.height = listview.getHeight() + 100;
+                }
+                for (String desig:Al[1])
+                {
+                    teamMemberDesig.add((desig));
+                }
+                listview.requestLayout();
+                dataAdapter.notifyDataSetChanged();
+            }
+        }
+
+
+
 
         barcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            startActivity(new Intent(getContext(),SimpleScannerFragmentActivity.class));
+           startActivity(new Intent(getActivity(), SimpleScannerFragmentActivity.class));
             }
         });
 
@@ -300,6 +323,9 @@ btnSaveList.setOnClickListener(new View.OnClickListener() {
         etDesigTM=(EditText) view.findViewById(R.id.etDesinationTM);
         llAddMemebers=(LinearLayout) view.findViewById(R.id.llAddMemebers);
         btnSaveList=(FancyButton) view.findViewById(R.id.btnSaveList);
+        teamMember=new ArrayList<String>();
+        teamMemberDesig=new ArrayList<String>();
+        teamMemberName=new ArrayList<String>();
     }
 
     void SaveData()

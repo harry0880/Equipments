@@ -15,13 +15,13 @@ public class InpectionId {
 
     static String id="-1";
 
-    public static int getNewentry() {
+    public static Boolean getNewentry() {
         return Newentry;
     }
 
-    public static void setNewentry(int newentry) {
+    public static void setNewentry(Boolean newentry) {
         Newentry = newentry;
     }
 
-    static int Newentry;
+    static Boolean Newentry;
 }

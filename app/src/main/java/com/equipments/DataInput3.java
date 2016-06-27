@@ -65,6 +65,7 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
     LinearLayout imagelayout;
     FancyButton btnSave,btnCam,btnCancel;
     Dbhandler db;
+    String savedEntry;
 
     @Nullable
     @Override
@@ -79,7 +80,8 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         initialize(view);
-        Id= InpectionId.getId();
+       if(InpectionId.getNewentry())
+
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

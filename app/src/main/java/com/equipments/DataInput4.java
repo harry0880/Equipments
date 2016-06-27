@@ -21,6 +21,8 @@ import com.equipments.Utils.DBConstant;
 import com.equipments.Utils.Dbhandler;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
+import java.util.ArrayList;
+
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class DataInput4 extends Fragment {
@@ -30,6 +32,7 @@ public class DataInput4 extends Fragment {
   GetSet getset;
   FancyButton btnproceed2;
   String idd;
+  String[] savedEntry;
    @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                            @Nullable Bundle savedInstanceState) {
@@ -42,9 +45,9 @@ public class DataInput4 extends Fragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
-    initialize(view);
-
+     initialize(view);
+    if(InpectionId.getNewentry())
+    savedEntry=db.getDataInput2(InpectionId.getId()).split("#");
     setCategory();
     setEquipment();
     setManufacturer();
@@ -134,36 +137,85 @@ public class DataInput4 extends Fragment {
 
   void setEquipment()
   {
-    ArrayAdapter<Equipment> Adapter = new ArrayAdapter<Equipment>(getActivity(), android.R.layout.simple_spinner_item, db.getEquipment());
+    ArrayList<Equipment> Al= db.getEquipment();
+    ArrayAdapter<Equipment> Adapter = new ArrayAdapter<Equipment>(getActivity(), android.R.layout.simple_spinner_item,Al);
     Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spEquipment.setAdapter(Adapter);
     spEquipment.setTitle("Equipment");
+    if (InpectionId.getNewentry() && savedEntry!=null) {
+      int cnt=0;
+      for (Equipment list : Al) {
+        cnt++;
+        if (savedEntry[0].equals(list.getEquipmentNameMaster_id())) {
+          getset.setEquipmentNameMaster_id(savedEntry[0]);
+          spEquipment.onSearchableItemClicked(Adapter.getItem(Adapter.getPosition(list)),cnt);
+          break;
+        }
+      }
+    }
   }
 
   void setManufacturer()
   {
-    ArrayAdapter<Manufacturer> Adapter = new ArrayAdapter<Manufacturer>(getActivity(), android.R.layout.simple_spinner_item, db.getManufacturer());
+    ArrayList<Manufacturer> Al=db.getManufacturer();
+    ArrayAdapter<Manufacturer> Adapter = new ArrayAdapter<Manufacturer>(getActivity(), android.R.layout.simple_spinner_item, Al);
     Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spManufacturer.setAdapter(Adapter);
     spManufacturer.setTitle("Manufacturer");
+    if (InpectionId.getNewentry() && savedEntry!=null) {
+      int cnt=0;
+      for (Manufacturer list : Al) {
+        cnt++;
+        if (savedEntry[2].equals(list.getEquipmentManufacturer_id())) {
+          getset.setEquipmentManufacturer_id(savedEntry[2]);
+          spManufacturer.onSearchableItemClicked(Adapter.getItem(Adapter.getPosition(list)),cnt);
+          break;
+        }
+      }
+    }
+
   }
 
   void setSupplier()
   {
-    ArrayAdapter<Supplier> Adapter = new ArrayAdapter<Supplier>(getActivity(), android.R.layout.simple_spinner_item, db.getSupplier());
+    ArrayList<Supplier> Al= db.getSupplier();
+    ArrayAdapter<Supplier> Adapter = new ArrayAdapter<Supplier>(getActivity(), android.R.layout.simple_spinner_item, Al);
     Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spSupplier.setAdapter(Adapter);
     spSupplier.setTitle("Supplier");
+    if (InpectionId.getNewentry() && savedEntry!=null) {
+      int cnt=0;
+      for (Supplier list : Al) {
+        cnt++;
+        if (savedEntry[3].equals(list.getEquipmentSupplier_id())) {
+          getset.setEquipmentSupplier_id(savedEntry[3]);
+          spSupplier.onSearchableItemClicked(Adapter.getItem(Adapter.getPosition(list)),cnt);
+          break;
+        }
+      }
+    }
   }
 
 
 
   void setCategory()
   {
-    ArrayAdapter<Category> Adapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item, db.getCategory());
+    ArrayList<Category> Al=db.getCategory();
+    ArrayAdapter<Category> Adapter = new ArrayAdapter<Category>(getActivity(), android.R.layout.simple_spinner_item, Al);
     Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     spCategory.setAdapter(Adapter);
     spCategory.setTitle("Category");
+    if (InpectionId.getNewentry() && savedEntry!=null){
+      int cnt=0;
+      for (Category list : Al) {
+        cnt++;
+        if (savedEntry[1].equals(list.getEquipmentcategory_id())) {
+          getset.setEquipmentcategory_id(savedEntry[1]);
+          spCategory.onSearchableItemClicked(Adapter.getItem(Adapter.getPosition(list)),cnt);
+          break;
+        }
+      }
+    }
   }
 
   void savedata2()
