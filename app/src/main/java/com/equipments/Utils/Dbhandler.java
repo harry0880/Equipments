@@ -416,6 +416,7 @@ public Boolean SendEquipmentEntries() {
                 list.add(new Institute(cr.getString(0), cr.getString(1)));
             } while (cr.moveToNext());
     }
+
         return list;
     }
     public ArrayList<Equipment> getEquipment()
@@ -629,6 +630,16 @@ public Boolean SendEquipmentEntries() {
             return alc;
         }
 
+    }
+
+    public  String getDataInput1(String id)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr= db.rawQuery("select "+DBConstant.C_Dist_Code+","+DBConstant.C_Doc_Inst_TypeID+","+DBConstant.C_Doc_Inst_ID+" from "+DBConstant.T_Inspection_Entries+" where"+DBConstant.C_ID+"='"+id+"';",null);
+        cr.moveToFirst();
+        String result=cr.getString(cr.getColumnIndex(DBConstant.C_Dist_Code))+"#"+cr.getString(cr.getColumnIndex(DBConstant.C_Doc_Inst_TypeID))+"#"+cr.getString(cr.getColumnIndex(DBConstant.C_Doc_Inst_ID));
+        db.close();
+        return result;
     }
 
 

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.equipments.GettersSetters.InpectionId;
 import com.equipments.Utils.Dbhandler;
 import com.equipments.Utils.RVAdapter;
 
@@ -36,6 +37,8 @@ public class InspectionList extends AppCompatActivity {
         setSupportActionBar(toolbar);
         dbh = new Dbhandler(this);
         InitializeAdapter();
+        InpectionId.setNewentry(0);
+
         LinearLayoutManager llm = new LinearLayoutManager(this);
         lvItems.setLayoutManager(llm);
         lvItems.setHasFixedSize(true);
@@ -43,8 +46,10 @@ public class InspectionList extends AppCompatActivity {
         rv.setOnItemClickListener(new RVAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String Id) {
-              /* Inspec.setId(Id);
-                startActivity(new Intent(InspectionList.this,Main.class));*/
+                InpectionId.setNewentry(0);
+                InpectionId.setId(Id);
+                startActivity(new Intent(InspectionList.this,Main.class));
+
             }
         });
 

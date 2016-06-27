@@ -14,4 +14,14 @@ public class InpectionId {
     }
 
     static String id="-1";
+
+    public static int getNewentry() {
+        return Newentry;
+    }
+
+    public static void setNewentry(int newentry) {
+        Newentry = newentry;
+    }
+
+    static int Newentry;
 }

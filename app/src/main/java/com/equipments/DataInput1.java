@@ -115,6 +115,7 @@ public class DataInput1 extends Fragment {
 
       }
     });
+
     spInstType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
       @Override
       public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
