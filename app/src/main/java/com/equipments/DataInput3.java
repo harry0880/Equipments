@@ -65,13 +65,12 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
     LinearLayout imagelayout;
     FancyButton btnSave,btnCam,btnCancel;
     Dbhandler db;
-    String savedEntry;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_datainput3, container, false);
-
+        Id=InpectionId.getId();
 
         return view;
     }
@@ -80,14 +79,17 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
         initialize(view);
-       if(InpectionId.getNewentry())
-
+       if(InpectionId.getNewentry()) {
+           processedBitmap=db.getImage(img_cnt + 1, Id);
+           if (processedBitmap != null) {
+                setThumbnail();
+           }
+       }
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File f = null;
-
                 try {
                     f = setUpPhotoFile();
                     mCurrentPhotoPath = f.getAbsolutePath();
