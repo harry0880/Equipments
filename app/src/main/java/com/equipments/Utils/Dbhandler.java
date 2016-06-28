@@ -38,7 +38,7 @@ public class Dbhandler extends SQLiteOpenHelper {
 
 
     final String NameSpace="http://tempuri.org/";
-   /* String URL="http://10.88.229.42:90/Service.asmx";*/
+/*    String URL="http://10.88.229.42:90/Service.asmx";*/
     String URL="http://demo.dpmuhry.gov.in/Service.asmx";
 
     String LoadMasterMathod = "master";
@@ -185,8 +185,8 @@ public class Dbhandler extends SQLiteOpenHelper {
     }
 public Boolean SendEquipmentEntries() {
     SQLiteDatabase db = getReadableDatabase();
-    Cursor cursor = db.rawQuery("select * from " + DBConstant.T_Inspection_Entries + ";", null);
-
+    Cursor cursor = db.rawQuery("select * from " + DBConstant.T_Inspection_Entries +";", null);
+    String id;
     if (cursor.getCount() <= 0) {
         return false;
     } else {
@@ -202,6 +202,7 @@ public Boolean SendEquipmentEntries() {
                   pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ID)));
                   pi.setType(String.class);
                   request.addProperty(pi);
+                  id=cursor.getString(cursor.getColumnIndex(DBConstant.C_ID));
 
 
                   pi = new PropertyInfo();
@@ -314,8 +315,24 @@ public Boolean SendEquipmentEntries() {
                       androidHTTP.call(SoapLinkSendEquipmentsEnntry, envolpe);
                       SoapPrimitive response = (SoapPrimitive) envolpe.getResponse();
                       res = response.toString();
+                      if( SendTeamEntries(res,id))
+                      {
+                          if(SendImageEntries(res,id))
+                          {
+                              return true;
+                          }
+                          else return false;
+                      }
+                      else
+                      {
+                          if(SendImageEntries(res,id))
+                          return true;
+                          else
+                              return false;
+                      }
+
                       //System.out.println(res);
-                      return true;
+
                   } catch (Exception e) {
                       e.printStackTrace();
                       return false;
@@ -327,7 +344,7 @@ public Boolean SendEquipmentEntries() {
 }
 public Boolean SendTeamEntries(String webid,String android_id) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select * from " + DBConstant.T_TeamMembers + "Where +"+DBConstant.C_ID+" = "+android_id+";", null);
+        Cursor cursor = db.rawQuery("select * from " + DBConstant.T_TeamMembers + " where +"+DBConstant.C_ID+" = '"+android_id+"';", null);
 
         if (cursor.getCount() <= 0) {
             return false;
@@ -373,7 +390,7 @@ public Boolean SendTeamEntries(String webid,String android_id) {
 
                     pi = new PropertyInfo();
                     pi.setName("Webid");
-                    pi.setValue(cursor.getString(cursor.getColumnIndex(webid)));
+                    pi.setValue(webid);
                     pi.setType(String.class);
                     request.addProperty(pi);
 
@@ -407,7 +424,7 @@ public Boolean SendTeamEntries(String webid,String android_id) {
     }
 public Boolean SendImageEntries(String webid,String android_id) {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select * from " + DBConstant.TBL_Img_Data + "Where +"+DBConstant.C_ID+" = "+android_id+";", null);
+        Cursor cursor = db.rawQuery("select * from " + DBConstant.TBL_Img_Data + " where +"+DBConstant.C_ID+" = '"+android_id+"';", null);
 
         if (cursor.getCount() <= 0) {
             return false;
@@ -453,12 +470,12 @@ public Boolean SendImageEntries(String webid,String android_id) {
 
                 pi = new PropertyInfo();
                 pi.setName("Webid");
-                pi.setValue(cursor.getString(cursor.getColumnIndex(webid)));
+                pi.setValue(webid);
                 pi.setType(String.class);
                 request.addProperty(pi);
 
                 pi = new PropertyInfo();
-                pi.setName("Createdby");
+                pi.setName("CreatedBy");
                 pi.setValue("Createdby");
                   /*  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.)));*/
                 pi.setType(String.class);
@@ -858,7 +875,7 @@ public Boolean SendImageEntries(String webid,String android_id) {
         }
         ArrayList<String> teamMemberName=new ArrayList<>();
         ArrayList<String> teamMemberDesig=new ArrayList<>();
-        ArrayList<String>[] arr=null;
+        ArrayList<String>[] arr=new ArrayList[2];
         cr.moveToFirst();
        do {
            teamMemberName.add(cr.getString(cr.getColumnIndex(DBConstant.C_TeamMemberName)));

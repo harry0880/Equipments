@@ -61,7 +61,7 @@ public class DataInput3 extends Fragment implements View.OnClickListener{
     RelativeLayout bar;
     EditText imdesc;
     String Id;
-    static int img_cnt = 0;
+     int img_cnt = 0;
     LinearLayout imagelayout;
     FancyButton btnSave,btnCam,btnCancel;
     Dbhandler db;
