@@ -40,11 +40,18 @@ public class Dbhandler extends SQLiteOpenHelper {
     final String NameSpace="http://tempuri.org/";
    /* String URL="http://10.88.229.42:90/Service.asmx";*/
     String URL="http://demo.dpmuhry.gov.in/Service.asmx";
+
     String LoadMasterMathod = "master";
     String SoapLinkMaster="http://tempuri.org/master";
 
     String SendEquipmentsEnntry = "getEquipmentsEnntry";
     String SoapLinkSendEquipmentsEnntry="http://tempuri.org/getEquipmentsEnntry";
+
+    String SendGetImages = "GetImages";
+    String SoapLinkGetImages="http://tempuri.org/GetImages";
+
+    String SendGetDoctorsList = "GetDoctorsList";
+    String SoapLinkGetDoctorsList="http://tempuri.org/GetDoctorsList";
 
     static String Id="0";
     JSONObject jsonResponse ;
@@ -318,7 +325,166 @@ public Boolean SendEquipmentEntries() {
       return true;
     }
 }
+public Boolean SendTeamEntries(String webid,String android_id) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + DBConstant.T_TeamMembers + "Where +"+DBConstant.C_ID+" = "+android_id+";", null);
 
+        if (cursor.getCount() <= 0) {
+            return false;
+        } else {
+            cursor.moveToFirst();
+            do {
+
+
+                    String res = null;
+                    SoapObject request = new SoapObject(NameSpace, SendGetDoctorsList);
+                    PropertyInfo pi = new PropertyInfo();
+
+                    pi.setName("AndroidId");
+                    pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ID)));
+                    pi.setType(String.class);
+                    request.addProperty(pi);
+
+
+                    pi = new PropertyInfo();
+                    pi.setName("UserId");
+                    pi.setValue("userid");
+          /*  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.))); add username*/
+                    pi.setType(String.class);
+                    request.addProperty(pi);
+
+                    pi = new PropertyInfo();
+                    pi.setName("Sno");
+                    pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_TeamMemberId)));
+                    pi.setType(String.class);
+                    request.addProperty(pi);
+
+                    pi = new PropertyInfo();
+                    pi.setName("DoctorName");
+                    pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_TeamMemberName)));
+                    pi.setType(String.class);
+                    request.addProperty(pi);
+
+                    pi = new PropertyInfo();
+                    pi.setName("DoctorDesignation");
+                    pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_TeamMemberDesignation)));
+                    pi.setType(String.class);
+                    request.addProperty(pi);
+
+                    pi = new PropertyInfo();
+                    pi.setName("Webid");
+                    pi.setValue(cursor.getString(cursor.getColumnIndex(webid)));
+                    pi.setType(String.class);
+                    request.addProperty(pi);
+
+                    pi = new PropertyInfo();
+                    pi.setName("Createdby");
+                    pi.setValue("Createdby");
+                  /*  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.)));*/
+                    pi.setType(String.class);
+                    request.addProperty(pi);
+
+                    SoapSerializationEnvelope envolpe = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                    envolpe.dotNet = true;
+                    envolpe.setOutputSoapObject(request);
+                    HttpTransportSE androidHTTP = new HttpTransportSE(URL);
+
+                    try {
+                        androidHTTP.call(SoapLinkGetDoctorsList, envolpe);
+                        SoapPrimitive response = (SoapPrimitive) envolpe.getResponse();
+                        res = response.toString();
+                        //System.out.println(res);
+                        return true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+
+            } while (cursor.moveToNext());
+
+        }
+
+    }
+    public Boolean SendImageEntries(String webid,String android_id) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + DBConstant.TBL_Img_Data + "Where +"+DBConstant.C_ID+" = "+android_id+";", null);
+
+        if (cursor.getCount() <= 0) {
+            return false;
+        } else {
+            cursor.moveToFirst();
+            do {
+
+
+                String res = null;
+                SoapObject request = new SoapObject(NameSpace, SendGetImages);
+                PropertyInfo pi = new PropertyInfo();
+
+                pi.setName("AndroidId");
+                pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_ID)));
+                pi.setType(String.class);
+                request.addProperty(pi);
+
+
+                pi = new PropertyInfo();
+                pi.setName("UserId");
+                pi.setValue("userid");
+          /*  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.))); add username*/
+                pi.setType(String.class);
+                request.addProperty(pi);
+
+                pi = new PropertyInfo();
+                pi.setName("Sno");
+                pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Image_Id)));
+                pi.setType(String.class);
+                request.addProperty(pi);
+
+                pi = new PropertyInfo();
+                pi.setName("Image");
+                pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Image)));
+                pi.setType(String.class);
+                request.addProperty(pi);
+
+                pi = new PropertyInfo();
+                pi.setName("ImageDetails");
+                pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.C_Image_Desc)));
+                pi.setType(String.class);
+                request.addProperty(pi);
+
+                pi = new PropertyInfo();
+                pi.setName("Webid");
+                pi.setValue(cursor.getString(cursor.getColumnIndex(webid)));
+                pi.setType(String.class);
+                request.addProperty(pi);
+
+                pi = new PropertyInfo();
+                pi.setName("Createdby");
+                pi.setValue("Createdby");
+                  /*  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.)));*/
+                pi.setType(String.class);
+                request.addProperty(pi);
+
+                SoapSerializationEnvelope envolpe = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envolpe.dotNet = true;
+                envolpe.setOutputSoapObject(request);
+                HttpTransportSE androidHTTP = new HttpTransportSE(URL);
+
+                try {
+                    androidHTTP.call(SoapLinkGetImages, envolpe);
+                    SoapPrimitive response = (SoapPrimitive) envolpe.getResponse();
+                    res = response.toString();
+                    //System.out.println(res);
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+
+            } while (cursor.moveToNext());
+
+        }
+
+    }
     public Boolean delete_Table_members(String id)
     {
         String rawquery="delete from "+DBConstant.T_TeamMembers+" where "+DBConstant.C_ID + "='"+id+"';";
