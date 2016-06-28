@@ -405,7 +405,7 @@ public Boolean SendTeamEntries(String webid,String android_id) {
         }
 
     }
-    public Boolean SendImageEntries(String webid,String android_id) {
+public Boolean SendImageEntries(String webid,String android_id) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from " + DBConstant.TBL_Img_Data + "Where +"+DBConstant.C_ID+" = "+android_id+";", null);
 
