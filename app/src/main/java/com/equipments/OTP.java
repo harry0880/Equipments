@@ -13,7 +13,6 @@ import android.widget.EditText;
 import com.equipments.GettersSetters.Instance;
 import com.equipments.GettersSetters.NotificationToken;
 import com.equipments.Utils.Dbhandler;
-import com.equipments.Utils.Splash;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -35,6 +34,7 @@ EditText otp;
         Instance.setInstanceId(FirebaseInstanceId.getInstance().getId());
         NotificationToken.setNotificationToken(FirebaseInstanceId.getInstance().getToken());
         if(dbh.chklogin())
+
         {
             startActivity(new Intent(context, Login.class));
             finish();
@@ -77,10 +77,48 @@ EditText otp;
         protected void onPostExecute(Boolean aBoolean) {
            dialog.dismiss();
             if(aBoolean)
-            startActivity(new Intent(context,Splash.class));
+                new getMaster_Tables().execute();
             else
             new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE).setTitleText("Error").show();
             super.onPostExecute(aBoolean);
+        }
+    }
+    private class getMaster_Tables extends AsyncTask<Void,Void,String>
+    {
+        ProgressDialog dialog=new ProgressDialog(context);
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Loading Data");
+            dialog.setTitle("Please Wait");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+
+            return dbh.Load_Master_tables();
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+           dialog.dismiss();
+            if(s.equals("Error"))
+            {
+                new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE).setTitleText("No Internet Connection").show();
+            }
+            else if(s.equals("ErrorServer"))
+            {
+                new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE).setTitleText("Unable to connect with Server!!!").show();
+            }
+            else {
+                startActivity(new Intent(context, Login.class));
+                finish();
+            }
+            super.onPostExecute(s);
         }
     }
 }
