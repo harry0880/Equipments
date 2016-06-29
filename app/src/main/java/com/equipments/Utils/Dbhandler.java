@@ -31,6 +31,9 @@ import org.ksoap2.serialization.SoapPrimitive;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 /**
@@ -79,6 +82,7 @@ public class Dbhandler extends SQLiteOpenHelper {
         db.execSQL(DBConstant.CREATE_TABLE_Supplier_Master);
         db.execSQL(DBConstant.Create_Table_Image);
         db.execSQL(DBConstant.CREATE_TABLE_Team_Memebers);
+        db.execSQL(DBConstant.CREATE_TABLE_Login);
         
     }
 
@@ -444,7 +448,6 @@ public Boolean SendTeamEntries(String webid,String android_id) {
                 pi = new PropertyInfo();
                 pi.setName("NotificationToken");
                 pi.setValue(NotificationToken.getNotificationToken());
-          /*  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.))); add username*/
                 pi.setType(String.class);
                 request.addProperty(pi);
 
@@ -464,7 +467,7 @@ public Boolean SendTeamEntries(String webid,String android_id) {
                     androidHTTP.call(SoapVerifyApplicationMethod, envolpe);
                     SoapPrimitive response = (SoapPrimitive) envolpe.getResponse();
                     res = response.toString();
-
+                    save_LoginDetails(res.split("#"));
                     //System.out.println(res);
                     return true;
                 } catch (Exception e) {
@@ -474,7 +477,68 @@ public Boolean SendTeamEntries(String webid,String android_id) {
 
         }
 
+    void save_LoginDetails(String[] data)
+    {
+        ContentValues cv=new ContentValues();
+        cv.put(DBConstant.C_UserId,data[0]);
+        cv.put(DBConstant.C_Password,data[1]);
+        SQLiteDatabase db=getWritableDatabase();
+        db.insert(DBConstant.T_Login,null,cv);
+    }
 
+    public static String md5(String string) {
+        byte[] hash;
+
+        try {
+            hash = MessageDigest.getInstance("MD5").digest(string.getBytes("UTF-8"));
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Huh, MD5 should be supported?", e);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Huh, UTF-8 should be supported?", e);
+        }
+
+        StringBuilder hex = new StringBuilder(hash.length * 2);
+
+        for (byte b : hash) {
+            int i = (b & 0xFF);
+            if (i < 0x10) hex.append('0');
+            hex.append(Integer.toHexString(i));
+        }
+        System.out.println(hex.toString());
+        return hex.toString();
+
+    }
+
+
+    public Boolean LoginMatch(String UId,String Pass)
+    {
+        Pass=md5(Pass);
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select "+DBConstant.C_UserId+" from "+DBConstant.T_Login+" where "+DBConstant.C_Password+"='"+Pass+"';",null);
+        if(cr.getCount()>0)
+        {
+            cr.moveToFirst();
+            if(cr.getString(0).equals(UId))
+            {
+                return true;
+            }
+            else return false;
+        }
+        else return false;
+    }
+
+
+    public Boolean chklogin()
+    {
+
+        SQLiteDatabase db=getReadableDatabase();
+        Cursor cr=db.rawQuery("select * from "+DBConstant.T_Login+" where "+DBConstant.C_Password+";",null);
+        if(cr.getCount()<=0)
+        {
+           return false;
+        }
+        else return true;
+    }
 
 
 public Boolean SendImageEntries(String webid,String android_id) {

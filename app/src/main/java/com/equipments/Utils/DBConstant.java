@@ -65,6 +65,12 @@ public class DBConstant {
 
     public final static int C_No_of_Image=5;
 
+    public final static String T_Login="Login";
+    public final static String C_UserId="Userid";
+    public final static String C_Password="Password";
+
+    public static final String CREATE_TABLE_Login="CREATE TABLE "+T_Login+"(" +C_UserId+" TEXT,"
+            +C_Password+ " TEXT);";
 
     public static final String CREATE_TABLE_District_Master= "CREATE TABLE "+ T_District_Master + "(" + C_Dist_Code/*1*/ + " TEXT,"
             + C_Dist_Name/*2*/+ " TEXT);";

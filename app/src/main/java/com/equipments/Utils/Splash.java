@@ -6,10 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.equipments.GettersSetters.Instance;
-import com.equipments.InspectionList;
+import com.equipments.Login;
 import com.equipments.R;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.File;
 
@@ -33,7 +31,7 @@ public class Splash extends AppCompatActivity {
             new getMaster_Tables().execute();
         else
         {
-            startActivity(new Intent(Splash.this,InspectionList.class));
+            startActivity(new Intent(Splash.this,Login.class));
             finish();
         }
     }
@@ -64,7 +62,7 @@ public class Splash extends AppCompatActivity {
                 new SweetAlertDialog(context,SweetAlertDialog.ERROR_TYPE).setTitleText("Unable to connect with Server!!!").show();
             }
             else {
-               startActivity(new Intent(Splash.this, InspectionList.class));
+               startActivity(new Intent(Splash.this, Login.class));
                 finish();
             }
             super.onPostExecute(s);

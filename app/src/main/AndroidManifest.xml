@@ -31,10 +31,7 @@
             android:name=".Utils.Splash"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity
             android:name=".Utils.AndroidDatabaseManager"
@@ -45,11 +42,30 @@
             android:label="barcode"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".InspectionList"
-            android:label="@string/title_activity_inspection_list"
-            android:theme="@style/AppTheme.NoActionBar">
+        android:name=".InspectionList"
+        android:label="@string/title_activity_inspection_list"
+        android:theme="@style/AppTheme.NoActionBar">
 
+    </activity>
+
+        <activity
+            android:name=".Login"
+            android:label="Login"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <activity
+            android:name=".OTP"
+            android:label="One Time Password"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+
 
         <!-- [START firebase_service] -->
         <service
