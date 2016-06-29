@@ -6,8 +6,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.equipments.GettersSetters.Instance;
 import com.equipments.InspectionList;
 import com.equipments.R;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.File;
 
@@ -26,6 +28,7 @@ public class Splash extends AppCompatActivity {
         setContentView(R.layout.splash);
         dbh=new Dbhandler(Splash.this);
         context=this;
+
         if(!doesDatabaseExist(getApplicationContext(),DBConstant.DBNameMaster))
             new getMaster_Tables().execute();
         else

@@ -12,6 +12,8 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.equipments.GettersSetters.CardGetSet;
+import com.equipments.GettersSetters.Instance;
+import com.equipments.GettersSetters.NotificationToken;
 import com.equipments.SpinnerAdapter.Category;
 import com.equipments.SpinnerAdapter.District;
 import com.equipments.SpinnerAdapter.Equipment;
@@ -52,6 +54,9 @@ public class Dbhandler extends SQLiteOpenHelper {
 
     String SendGetDoctorsList = "GetDoctorsList";
     String SoapLinkGetDoctorsList="http://tempuri.org/GetDoctorsList";
+
+    String VerifyApplicationMethod = "VerifyApplication";
+    String SoapVerifyApplicationMethod="http://tempuri.org/VerifyApplication";
 
     static String Id="0";
     JSONObject jsonResponse ;
@@ -342,6 +347,8 @@ public Boolean SendEquipmentEntries() {
       return true;
     }
 }
+
+
 public Boolean SendTeamEntries(String webid,String android_id) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from " + DBConstant.T_TeamMembers + " where +"+DBConstant.C_ID+" = '"+android_id+"';", null);
@@ -351,8 +358,6 @@ public Boolean SendTeamEntries(String webid,String android_id) {
         } else {
             cursor.moveToFirst();
             do {
-
-
                     String res = null;
                     SoapObject request = new SoapObject(NameSpace, SendGetDoctorsList);
                     PropertyInfo pi = new PropertyInfo();
@@ -422,6 +427,56 @@ public Boolean SendTeamEntries(String webid,String android_id) {
         }
 
     }
+
+    public Boolean SendOTP(String OTP) {
+        SQLiteDatabase db = getReadableDatabase();
+
+                String res = null;
+                SoapObject request = new SoapObject(NameSpace, VerifyApplicationMethod);
+                PropertyInfo pi = new PropertyInfo();
+
+                pi.setName("Deviceid");
+                pi.setValue(Instance.getInstanceId());
+                pi.setType(String.class);
+                request.addProperty(pi);
+
+
+                pi = new PropertyInfo();
+                pi.setName("NotificationToken");
+                pi.setValue(NotificationToken.getNotificationToken());
+          /*  pi.setValue(cursor.getString(cursor.getColumnIndex(DBConstant.))); add username*/
+                pi.setType(String.class);
+                request.addProperty(pi);
+
+                pi = new PropertyInfo();
+                pi.setName("otp");
+                pi.setValue(OTP);
+                pi.setType(String.class);
+                request.addProperty(pi);
+
+
+                SoapSerializationEnvelope envolpe = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                envolpe.dotNet = true;
+                envolpe.setOutputSoapObject(request);
+                HttpTransportSE androidHTTP = new HttpTransportSE(URL);
+
+                try {
+                    androidHTTP.call(SoapVerifyApplicationMethod, envolpe);
+                    SoapPrimitive response = (SoapPrimitive) envolpe.getResponse();
+                    res = response.toString();
+
+                    //System.out.println(res);
+                    return true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+
+        }
+
+
+
+
 public Boolean SendImageEntries(String webid,String android_id) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from " + DBConstant.TBL_Img_Data + " where +"+DBConstant.C_ID+" = '"+android_id+"';", null);
