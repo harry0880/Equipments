@@ -515,6 +515,7 @@ public Boolean SendTeamEntries(String webid,String android_id) {
         Pass=md5(Pass);
         SQLiteDatabase db=getReadableDatabase();
         Cursor cr=db.rawQuery("select "+DBConstant.C_UserId+" from "+DBConstant.T_Login+" where "+DBConstant.C_Password+"='"+Pass+"';",null);
+
         if(cr.getCount()>0)
         {
             cr.moveToFirst();
